@@ -15,6 +15,11 @@ package com.sidooo.ufile;
 
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.model.UBucket;
+import com.sidooo.ufile.model.UBucketListing;
+import com.sidooo.ufile.model.UObject;
+import com.sidooo.ufile.model.UObjectListing;
+import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.client.HttpClient;
 
 import java.io.File;

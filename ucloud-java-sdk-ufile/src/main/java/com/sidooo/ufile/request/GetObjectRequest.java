@@ -15,10 +15,11 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
 import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.UObject;
-import com.sidooo.ufile.UObjectMetadata;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.model.UObject;
+import com.sidooo.ufile.model.UObjectInputStream;
+import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -100,11 +101,9 @@ public class GetObjectRequest
             throws UFileServiceException
     {
         UObject object = new UObject();
-        object.setKey(objectKey);
-        object.setContent(content);
-        UObjectMetadata objectMetadata = new UObjectMetadata(headers);
-        object.setObjectMetadata(objectMetadata);
-        object.setLengnth(objectMetadata.getContentLength());
+        object.setObjectKey(objectKey);
+        object.setObjectContent(new UObjectInputStream(content));
+        object.setObjectMetadata(new UObjectMetadata(headers));
         this.object = object;
     }
 

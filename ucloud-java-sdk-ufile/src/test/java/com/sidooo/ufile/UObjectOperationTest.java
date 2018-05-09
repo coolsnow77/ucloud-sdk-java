@@ -13,6 +13,8 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ufile.model.UObjectListing;
+import com.sidooo.ufile.model.UObjectMetadata;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,14 +86,14 @@ public class UObjectOperationTest
         assertEquals(objectListing.getObjectSummaries().size(), 10);
         for (int i = 0; i < 10; i++) {
             String testKey = String.format("test2/object-%02d", i);
-            assertEquals(objectListing.getObjectSummaries().get(i).getKey(), testKey);
+            assertEquals(objectListing.getObjectSummaries().get(i).getObjectKey(), testKey);
         }
 
         UObjectListing nextObjectListing = ufile.listNextBatchOfObjects(objectListing);
         assertEquals(nextObjectListing.getObjectSummaries().size(), 6);
         for (int i = 0; i < 6; i++) {
             String testKey = String.format("test2/object-%02d", 10 + i);
-            assertEquals(nextObjectListing.getObjectSummaries().get(i).getKey(), testKey);
+            assertEquals(nextObjectListing.getObjectSummaries().get(i).getObjectKey(), testKey);
         }
 
         nextObjectListing = ufile.listNextBatchOfObjects(nextObjectListing);

@@ -14,10 +14,10 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UBucket;
 import com.sidooo.ufile.UFileCredentials;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.model.UBucket;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;

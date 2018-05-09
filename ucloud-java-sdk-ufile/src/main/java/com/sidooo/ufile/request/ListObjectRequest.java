@@ -17,10 +17,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.UObject;
-import com.sidooo.ufile.UObjectListing;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.model.UObjectListing;
+import com.sidooo.ufile.model.UObjectSummary;
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -28,6 +28,7 @@ import org.apache.http.client.utils.URIBuilder;
 
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 /*
  * Request Parameters
@@ -84,7 +85,8 @@ public class ListObjectRequest
     }
 
     @Override
-    public HttpUriRequest createHttpRequest() throws UFileClientException
+    public HttpUriRequest createHttpRequest()
+            throws UFileClientException
     {
         try {
             String uri = "http://"
@@ -104,7 +106,8 @@ public class ListObjectRequest
     }
 
     @Override
-    public void onSuccess(JsonObject json, Header[] headers, InputStream content) throws UFileServiceException
+    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
+            throws UFileServiceException
     {
         objectListing = new UObjectListing();
 
@@ -117,8 +120,11 @@ public class ListObjectRequest
             throw new UFileServiceException("Bucket Id missing.");
         }
         String nextMarker = json.get("NextMarker").getAsString();
-        if (nextMarker != null) {
+        if (nextMarker != null && nextMarker.length() > 0) {
             objectListing.setNextMarker(nextMarker);
+        }
+        else {
+            objectListing.setTruncated(false);
         }
 
         objectListing.setLimit(limit);
@@ -126,18 +132,20 @@ public class ListObjectRequest
 
         JsonArray array = json.get("DataSet").getAsJsonArray();
         for (JsonElement entry : array) {
-            UObject object = new UObject();
+            UObjectSummary objectSummary = new UObjectSummary();
             String fileName = entry.getAsJsonObject().get("FileName").getAsString();
-            object.setKey(fileName);
+            objectSummary.setObjectKey(fileName);
             Long size = entry.getAsJsonObject().get("Size").getAsLong();
-            object.setLengnth(size);
+            objectSummary.setSize(size);
             String hash = entry.getAsJsonObject().get("Hash").getAsString();
-            object.setHash(hash);
-//            String mimeType = object.getAsJsonObject().get("MimeType").getAsString();
-//            Long createTimestamp = object.getAsJsonObject().get("CreateTime").getAsLong();
-//            Long modifyTimestamp = object.getAsJsonObject().get("ModifyTime").getAsLong();
-//            metadata.setLastModified(new Date(modifyTimestamp));
-            objectListing.putObjectSummary(object);
+            objectSummary.setHash(hash);
+            String mimeType = entry.getAsJsonObject().get("MimeType").getAsString();
+            objectSummary.setMimeType(mimeType);
+            Long created = entry.getAsJsonObject().get("CreateTime").getAsLong();
+            objectSummary.setCreated(new Date(created));
+            Long modifyTimestamp = entry.getAsJsonObject().get("ModifyTime").getAsLong();
+            objectSummary.setLastModified(new Date(modifyTimestamp));
+            objectListing.putObjectSummary(objectSummary);
         }
     }
 

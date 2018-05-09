@@ -15,6 +15,11 @@ package com.sidooo.ufile;
 
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.model.UBucket;
+import com.sidooo.ufile.model.UBucketListing;
+import com.sidooo.ufile.model.UObject;
+import com.sidooo.ufile.model.UObjectListing;
+import com.sidooo.ufile.model.UObjectMetadata;
 import com.sidooo.ufile.request.CreateBucketRequest;
 import com.sidooo.ufile.request.DeleteBucketRequest;
 import com.sidooo.ufile.request.DeleteObjectRequest;
@@ -154,9 +159,9 @@ public class UFileClient
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            inputStream = object.getContent();
+            inputStream = object.getObjectContent();
             outputStream = new BufferedOutputStream(new FileOutputStream(destinationFile));
-            int bufSize = 1024 * 4;
+            int bufSize = 1024 * 8;
             byte[] buffer = new byte[bufSize];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) > 0) {
@@ -188,7 +193,7 @@ public class UFileClient
             throws UFileClientException, UFileServiceException
     {
         UObject object = getObject(bucketName, key);
-        InputStream content = object.getContent();
+        InputStream content = object.getObjectContent();
         if (content != null) {
             // Error Message
             try {

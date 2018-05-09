@@ -11,8 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sidooo.ufile;
+package com.sidooo.ufile.model;
 
+import com.sidooo.ufile.UFileHeaders;
 import org.apache.http.Header;
 
 import java.util.Date;

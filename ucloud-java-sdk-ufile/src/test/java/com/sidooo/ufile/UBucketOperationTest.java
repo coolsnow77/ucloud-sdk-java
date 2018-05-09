@@ -13,6 +13,8 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ufile.model.UBucket;
+import com.sidooo.ufile.model.UBucketListing;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

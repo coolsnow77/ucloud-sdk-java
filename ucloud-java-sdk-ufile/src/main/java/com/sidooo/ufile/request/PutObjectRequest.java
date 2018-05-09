@@ -15,9 +15,9 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
 import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.UObjectMetadata;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sidooo.ufile;
+package com.sidooo.ufile.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class UObjectListing
      */
     private List<String> commonPrefixes = new ArrayList<String>();
 
-    private List<UObject> objectSummaries = new ArrayList<UObject>();
+    private List<UObjectSummary> objectSummaries = new ArrayList<UObjectSummary>();
 
     private String prefix;
 
@@ -41,21 +41,21 @@ public class UObjectListing
 
     /**
      * Indicates if this is a complete listing, or if the caller needs to make
-     * additional requests to Amazon S3 to see the full object listing for an S3
+     * additional requests to  UFile to see the full object listing for an UFile
      * bucket
      */
-    private boolean isTruncated;
+    private boolean isTruncated = true;
 
     private int limit;
 
-    public List<UObject> getObjectSummaries()
+    public List<UObjectSummary> getObjectSummaries()
     {
         return objectSummaries;
     }
 
-    public void putObjectSummary(UObject meta)
+    public void putObjectSummary(UObjectSummary objectSummary)
     {
-        objectSummaries.add(meta);
+        objectSummaries.add(objectSummary);
     }
 
     public String getNextMarker()

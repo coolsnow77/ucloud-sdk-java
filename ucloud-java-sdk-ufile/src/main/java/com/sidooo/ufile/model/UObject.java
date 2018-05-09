@@ -11,17 +11,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sidooo.ufile;
+package com.sidooo.ufile.model;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public class UObject
 {
+    /** The name of the bucket in which this object is contained */
+    private String bucketName;
+
+    /** The key under which this object is stored */
     private String key;
 
-    private InputStream objectContent;
+    private Long objectSize;
 
-    private Long objectLength;
+    private transient UObjectInputStream objectContent;
 
     private UObjectMetadata objectMetadata;
 
@@ -29,40 +34,32 @@ public class UObject
 
     public UObject() {}
 
-    public UObject(String key)
+    public String getBucketName()
     {
-        this.key = key;
+        return this.bucketName;
     }
 
-    public UObject(String key, InputStream content)
+    public void setBucketName(String bucketName)
     {
-        this.key = key;
-        this.objectContent = content;
+        this.bucketName = bucketName;
     }
 
-    public UObject(String key, InputStream content, Long length)
-    {
-        this.key = key;
-        this.objectContent = content;
-        this.objectLength = length;
-    }
-
-    public String getKey()
+    public String getObjectKey()
     {
         return key;
     }
 
-    public void setKey(String key)
+    public void setObjectKey(String key)
     {
         this.key = key;
     }
 
-    public InputStream getContent()
+    public UObjectInputStream getObjectContent()
     {
         return objectContent;
     }
 
-    public void setContent(InputStream content)
+    public void setObjectContent(UObjectInputStream content)
     {
         this.objectContent = content;
     }
@@ -77,23 +74,11 @@ public class UObject
         this.objectMetadata = metadata;
     }
 
-    public Long getLength()
+    public void close() throws IOException
     {
-        return objectLength;
-    }
-
-    public void setLengnth(Long length)
-    {
-        this.objectLength = length;
-    }
-
-    public String getHash()
-    {
-        return hash;
-    }
-
-    public void setHash(String hash)
-    {
-        this.hash = hash;
+        InputStream is = getObjectContent();
+        if (is != null) {
+            is.close();
+        }
     }
 }
