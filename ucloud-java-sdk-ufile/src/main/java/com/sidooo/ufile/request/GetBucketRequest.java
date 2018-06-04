@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile.request;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -36,15 +37,23 @@ public class GetBucketRequest
     public void onSuccess(JsonObject json, Header[] headers, InputStream content)
             throws UFileServiceException
     {
-        if (!json.has("BucketName")) {
+        if (!json.has("DataSet")) {
+            throw new UFileServiceException("DataSet missing.");
+        }
+        JsonArray dataSet = json.getAsJsonArray("DataSet");
+        if (dataSet.size() != 1) {
+            throw new UFileServiceException(("Multiple bucket exists in GetBucketResponse."));
+        }
+        JsonObject jsonBucket = dataSet.get(0).getAsJsonObject();
+        if (!jsonBucket.has("BucketName")) {
             throw new UFileServiceException("Bucket Name missing.");
         }
-        String bucketName = json.get("BucketName").getAsString();
+        String bucketName = jsonBucket.get("BucketName").getAsString();
 
-        if (!json.has("BucketId")) {
+        if (!jsonBucket.has("BucketId")) {
             throw new UFileServiceException("Bucket Id missing.");
         }
-        String bucketId = json.get("BucketId").getAsString();
+        String bucketId = jsonBucket.get("BucketId").getAsString();
 
         this.bucket = new UBucket(bucketId, bucketName);
     }

@@ -58,6 +58,11 @@ public abstract class URequest
         this.parameters.put(name, value);
     }
 
+    public String getParameter(String name)
+    {
+        return this.parameters.get(name);
+    }
+
     public Map<String, String> getParameters()
     {
         return this.parameters;
@@ -86,6 +91,6 @@ public abstract class URequest
     /*
      * API请求成功后的处理函数
      */
-    abstract void onSuccess(JsonObject response, Header[] headers, InputStream content)
+    public abstract void onSuccess(JsonObject response, Header[] headers, InputStream content)
             throws UFileServiceException;
 }

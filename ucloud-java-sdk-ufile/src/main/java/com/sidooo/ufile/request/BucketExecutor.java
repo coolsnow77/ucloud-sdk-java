@@ -22,6 +22,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -29,9 +30,7 @@ import org.apache.http.client.utils.URIBuilder;
 
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class BucketExecutor
         extends AbstractExcector
@@ -43,90 +42,38 @@ public class BucketExecutor
         super(credentials);
     }
 
-    public String getHttpString(UBucketRequest request)
-    {
-        Map<String, String> sortedMap = new TreeMap<String, String>();
-        sortedMap.put("Action", request.getActionName());
-        sortedMap.put("PublicKey", getCredentials().getPublicKey());
-        for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-
-        String httpString = "https://api.ucloud.cn/?";
-        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
-            httpString += entry.getKey() + "=" + URLEncoder.encode(entry.getValue()) + "&";
-        }
-
-        String signture = updateSignature(request);
-        httpString += "Signature=" + signture;
-        return httpString;
-    }
-
-    public String updateSignature(UBucketRequest request)
-    {
-        Map<String, String> sortedMap = new TreeMap<String, String>();
-        sortedMap.put("PublicKey", getCredentials().getPublicKey());
-        for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-
-        String result = "";
-        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
-            result += entry.getKey() + entry.getValue();
-        }
-
-        String signatureString = result + getCredentials().getPrivateKey();
-
-        String hashKey = null;
-        try {
-            MessageDigest digest = java.security.MessageDigest
-                    .getInstance("SHA-1");
-            digest.update(signatureString.getBytes());
-            byte[] messageDigest = digest.digest();
-            // Create Hex String
-            StringBuilder hexString = new StringBuilder();
-            // 字节数组转换为 十六进制 数
-            for (int i = 0; i < messageDigest.length; i++) {
-                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
-                if (shaHex.length() < 2) {
-                    hexString.append(0);
-                }
-                hexString.append(shaHex);
-            }
-            hashKey = hexString.toString();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return hashKey;
-    }
-
     public void execute(UBucketRequest request)
             throws UFileClientException
     {
         // 计算API请求的签名
-        request.addHeader("PublicKey", getCredentials().getPublicKey());
-        String signature = updateSignature(request);
-        request.addHeader("Signature", signature);
+        String signature = UCloudSignatureBuilder.getSignature(request, getCredentials());
 
         // 构建Http URI
         HttpUriRequest httpRequest = null;
         try {
-            URIBuilder builder = new URIBuilder("https://" + UCLOUD_API_HOST);
+            URIBuilder builder = new URIBuilder("https://" + UCLOUD_API_HOST + "/");
             for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
                 builder.setParameter(entry.getKey(), entry.getValue());
             }
+            builder.setParameter("PublicKey", getCredentials().getPublicKey());
+            builder.setParameter("Signature", signature);
 
             switch (request.getHttpType()) {
                 case GET:
                     httpRequest = new HttpGet(builder.build());
+                    break;
                 case POST:
                     httpRequest = new HttpPost(builder.build());
+                    break;
                 case DELETE:
                     httpRequest = new HttpDelete(builder.build());
+                    break;
                 case PUT:
                     httpRequest = new HttpPut(builder.build());
+                    break;
+                case HEAD:
+                    httpRequest = new HttpHead(builder.build());
+                    break;
             }
         }
         catch (URISyntaxException e) {
@@ -145,7 +92,7 @@ public class BucketExecutor
                 }
                 Long returnCode = json.get("RetCode").getAsLong();
                 if (returnCode != 0) {
-                    throw new UFileServiceException("Return Code error.");
+                    throw new UFileServiceException("Return Code error: " + content);
                 }
                 json.remove("RetCode");
 
@@ -153,8 +100,8 @@ public class BucketExecutor
                     throw new UFileServiceException("Action missing.");
                 }
                 String action = json.get("Action").getAsString();
-                if (!action.equals("CreateBucketResponse")) {
-                    throw new UFileServiceException("Action mismatch.");
+                if (!action.equals(request.getActionName() + "Response")) {
+                    throw new UFileServiceException("Action mismatch: " + action);
                 }
                 json.remove("Action");
                 request.onSuccess(json, null, null);

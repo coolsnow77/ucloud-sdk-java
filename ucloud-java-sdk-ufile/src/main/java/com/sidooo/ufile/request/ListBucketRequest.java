@@ -55,9 +55,9 @@ public class ListBucketRequest
         buckets = new UBucketListing();
         for (int i = 0; i < dataSet.size(); i++) {
             UBucket bucket = new UBucket();
-            String bucketId = dataSet.get(0).getAsJsonObject().get("BuckeId").getAsString();
+            String bucketId = dataSet.get(i).getAsJsonObject().get("BucketId").getAsString();
             bucket.setId(bucketId);
-            String bucketName = dataSet.get(0).getAsJsonObject().get("BucketName").getAsString();
+            String bucketName = dataSet.get(i).getAsJsonObject().get("BucketName").getAsString();
             bucket.setName(bucketName);
             buckets.putBucket(bucket);
         }

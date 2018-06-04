@@ -28,7 +28,6 @@ public class UBucketOperationTest
     static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
     static final String LOCAL_TEST_FILE = "/Users/kimzhang/Downloads/Jenkins2.png";
     private UFileCredentials credentials;
-    private String region = "cn-bj2";
     private UFile ufile;
     static final String TEST_BUCKET_NAME = "ufile-sdk-test";
 
@@ -37,7 +36,7 @@ public class UBucketOperationTest
     {
         credentials = new UFileCredentials();
         credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(region, credentials);
+        ufile = UFileClientBuilder.standard(credentials, "cn-bj");
     }
 
     @After
@@ -51,6 +50,8 @@ public class UBucketOperationTest
         }
     }
 
+//    {"BucketName":"usql","BucketId":"ufile-3gilll","Domain":{"Src":["usql.cn-bj.ufileos.com"],"Cdn":["usql.ufile.ucloud.com.cn"],"CustomSrc":[],"CustomCdn":[]},"Type":"private","CreateTime":1524209353,"ModifyTime":1524209353,"CdnDomainId":["ucdn-saop5d"],"Biz":"general","Region":"cn-bj","HasUserDomain":0,"Tag":"uddp"}
+
     @Test(expected = Test.None.class)
     public void test1()
             throws Exception
@@ -61,15 +62,17 @@ public class UBucketOperationTest
         int s = random.nextInt(max) % (max - min + 1) + min;
         String bucketName = "usql-test-" + s;
 
+        UBucketListing buckets = ufile.listBuckets();
+
         // 创建bucket
-        UBucket newBucket = ufile.createBucket(bucketName, "public", "cn-bj2");
+        UBucket newBucket = ufile.createBucket(bucketName, "public", "cn-bj");
         assertEquals(newBucket.getName(), bucketName);
 
         // 获取bucket信息
         UBucket bucket = ufile.getBucket(bucketName);
         assertEquals(bucket.getId(), newBucket.getId());
 
-        UBucketListing buckets = ufile.listBuckets();
+        buckets = ufile.listBuckets();
         for (UBucket entry : buckets.getBuckets()) {
             System.out.println(entry.getId() + ":" + entry.getName());
         }

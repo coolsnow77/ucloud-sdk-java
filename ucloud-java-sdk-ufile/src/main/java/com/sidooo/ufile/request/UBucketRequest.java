@@ -19,11 +19,11 @@ public abstract class UBucketRequest
     public UBucketRequest(HttpType httpType, String actionName, String region)
     {
         super(httpType, region);
-        this.addHeader("Action", actionName);
+        this.addParameter("Action", actionName);
     }
 
     public String getActionName()
     {
-        return getHeader("Action");
+        return getParameter("Action");
     }
 }

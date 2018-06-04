@@ -21,11 +21,11 @@ public class UFileClientBuilder
     public static UFile defaultClient()
     {
         UFileCredentials credentials = new UFileCredentials();
-        return standard("cn-bj", credentials);
+        return standard(credentials, "cn-bj");
     }
 
-    public static UFile standard(String region, UFileCredentials credentials)
+    public static UFile standard(UFileCredentials credentials, String defaultRegion)
     {
-        return new UFileClient(credentials).setRegion(region);
+        return new UFileClient(credentials).setRegion(defaultRegion);
     }
 }

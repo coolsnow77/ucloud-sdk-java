@@ -34,9 +34,26 @@ public interface UFile
 
     UFile setRegion(String region);
 
+    /**
+     * 创建UFile Bucket
+     *
+     * @param bucketName
+     * @param type
+     * @param region
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
     UBucket createBucket(String bucketName, String type, String region)
             throws UFileClientException, UFileServiceException;
 
+    /**
+     * 获取指定Region下的所有Bucket
+     *
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
     UBucketListing listBuckets()
             throws UFileClientException, UFileServiceException;
 

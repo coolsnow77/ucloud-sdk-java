@@ -43,7 +43,7 @@ public class UObjectOperationTest
     {
         credentials = new UFileCredentials();
         credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(region, credentials);
+        ufile = UFileClientBuilder.standard(credentials, region);
     }
 
     @After

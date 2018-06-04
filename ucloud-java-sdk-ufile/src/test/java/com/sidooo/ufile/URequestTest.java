@@ -13,9 +13,15 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ufile.request.CreateBucketRequest;
+import com.sidooo.ufile.request.HttpType;
+import com.sidooo.ufile.request.UBucketRequest;
+import com.sidooo.ufile.request.UCloudSignatureBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class URequestTest
 {
@@ -37,31 +43,20 @@ public class URequestTest
     @Test
     public void test1()
     {
-//        UFileCredentials cred = new UFileCredentials();
-//        cred.setPublicKey("ucloudsomeone@example.com1296235120854146120");
-//        cred.setPrivateKey("46f09bb9fab4f12dfc160dae12273d5332b5debe");
-//
-//        UBucketRequest request = new UBucketRequest("CreateUHostInstance", cred);
-//        request.addParameter("CPU", "2");
-//        request.addParameter("Name", "Host01");
-//        request.addParameter("LoginMode", "Password");
-//        request.addParameter("ImageId", "f43736e1-65a5-4bea-ad2e-8a46e18883c2");
-//        request.addParameter("ChargeType", "Month");
-//        request.addParameter("DiskSpace", "10");
-//        request.addParameter("Memory", "2048");
-//        request.addParameter("Password", "VUNsb3VkLmNu");
-//        request.addParameter("Quantity", "1");
-//        request.addParameter("Zone", "cn-bj2-04");
-//        request.addParameter("Region", "cn-bj2");
-//        request.updateSignature();
-//
-//        String correctSignature = "ActionCreateUHostInstanceCPU2ChargeTypeMonthDiskSpace10ImageIdf43736e1-65a5-4bea-ad2e-8a46e18883c2LoginModePasswordMemory2048NameHost01PasswordVUNsb3VkLmNuPublicKeyucloudsomeone@example.com1296235120854146120Quantity1Regioncn-bj2Zonecn-bj2-0446f09bb9fab4f12dfc160dae12273d5332b5debe";
-//
-//        String signature = request.getSignature();
-//
-//        assertEquals(signature, "4f9ef5df2abab2c6fccd1e9515cb7e2df8c6bb65");
-//
-//        String httpString = "https://api.ucloud.cn/?Action=CreateUHostInstance&CPU=2&ChargeType=Month&DiskSpace=10&ImageId=f43736e1-65a5-4bea-ad2e-8a46e18883c2&LoginMode=Password&Memory=2048&Name=Host01&Password=VUNsb3VkLmNu&PublicKey=ucloudsomeone%40example.com1296235120854146120&Quantity=1&Region=cn-bj2&Zone=cn-bj2-04&Signature=4f9ef5df2abab2c6fccd1e9515cb7e2df8c6bb65";
-//        assertEquals(httpString, request.getHttpString());
+        UFileCredentials credentials = new UFileCredentials();
+        credentials.setPublicKey("ucloudsomeone@example.com1296235120854146120");
+        credentials.setPrivateKey("46f09bb9fab4f12dfc160dae12273d5332b5debe");
+
+        CreateUHostInstanceRequest request = new CreateUHostInstanceRequest();
+
+        // 验证待签名的字符串
+        String correctAPIString = "ActionCreateUHostInstanceCPU2ChargeTypeMonthDiskSpace10ImageIdf43736e1-65a5-4bea-ad2e-8a46e18883c2LoginModePasswordMemory2048NameHost01PasswordVUNsb3VkLmNuPublicKeyucloudsomeone@example.com1296235120854146120Quantity1Regioncn-bj2Zonecn-bj2-0446f09bb9fab4f12dfc160dae12273d5332b5debe";
+        assertEquals(correctAPIString, UCloudSignatureBuilder.getAPIString(request, credentials));
+
+        String signature = UCloudSignatureBuilder.getSignature(request, credentials);
+        assertEquals("4f9ef5df2abab2c6fccd1e9515cb7e2df8c6bb65", signature);
+
+        String correctHttpString = "https://api.ucloud.cn/?Action=CreateUHostInstance&CPU=2&ChargeType=Month&DiskSpace=10&ImageId=f43736e1-65a5-4bea-ad2e-8a46e18883c2&LoginMode=Password&Memory=2048&Name=Host01&Password=VUNsb3VkLmNu&PublicKey=ucloudsomeone%40example.com1296235120854146120&Quantity=1&Region=cn-bj2&Zone=cn-bj2-04&Signature=4f9ef5df2abab2c6fccd1e9515cb7e2df8c6bb65";
+        assertEquals(correctHttpString, UCloudSignatureBuilder.getHttpString(request, credentials));
     }
 }
