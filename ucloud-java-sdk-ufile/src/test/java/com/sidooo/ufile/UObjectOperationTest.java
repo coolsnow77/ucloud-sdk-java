@@ -13,6 +13,10 @@
  */
 package com.sidooo.ufile;
 
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.sidooo.ufile.model.UObject;
+import com.sidooo.ufile.model.UObjectInputStream;
 import com.sidooo.ufile.model.UObjectListing;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.junit.After;
@@ -22,6 +26,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 删除文件测试
@@ -105,6 +110,23 @@ public class UObjectOperationTest
             String deleteObjectKey = ufile.deleteObject(TEST_BUCKET, testKey);
             assertEquals(deleteObjectKey, testKey);
         }
+    }
+
+    /**
+     * 测试文件偏移读写UFile Object
+     */
+    @Test(expected = Test.None.class)
+    public void test3() throws Exception
+    {
+        UObject object = ufile.getObject(TEST_BUCKET, "part.tbl", 32, 32);
+        UObjectInputStream stream = object.getObjectContent();
+        assertEquals(TEST_BUCKET, object.getBucketName());
+        assertEquals("part.tbl", object.getObjectKey());
+        int length = stream.available();
+        assertEquals(32, length);
+        byte[] buffer = new byte[32];
+        stream.read(buffer);
+        assertEquals("olate lace|Manufacturer#1|Brand#", new String(buffer));
     }
 
 //

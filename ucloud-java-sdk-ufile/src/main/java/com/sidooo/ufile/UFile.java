@@ -66,6 +66,20 @@ public interface UFile
     UObject getObject(String bucketName, String key)
             throws UFileClientException, UFileServiceException;
 
+    /**
+     * 获取对象指定偏移和长度的内容
+     *
+     * @param bucketName
+     * @param key
+     * @param offset
+     * @param length
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObject getObject(String bucketName, String key, long offset, int length)
+            throws UFileClientException, UFileServiceException;
+
     UObjectMetadata getObject(String bucketName, String key, File destinationFile)
             throws UFileClientException, UFileServiceException;
 

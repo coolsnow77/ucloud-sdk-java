@@ -14,6 +14,7 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
+import com.sidooo.ufile.UFileHeaders;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObject;
 import com.sidooo.ufile.model.UObjectInputStream;
@@ -21,6 +22,8 @@ import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
 
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /*
  *
  * Request Parameters
@@ -46,10 +49,9 @@ import java.io.InputStream;
 public class GetObjectRequest
         extends UObjectRequest
 {
-    private String objectKey;
-    private String objectRange;
-
     private UObject object;
+
+    private static final String CONTENT_RANGE_REGEX = "^bytes ([0-9]+)-([0-9]+)/[0-9]+";
 
     public GetObjectRequest(String region, String bucketName, String objectKey)
     {
@@ -64,13 +66,36 @@ public class GetObjectRequest
         this.addHeader("Range", objectRange);
     }
 
+    private String getContentRange(Header[] headers)
+    {
+        for (Header header : headers) {
+            if (header.getName().equals(UFileHeaders.CONTENT_RANGE)) {
+                return header.getValue();
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onSuccess(JsonObject response, Header[] headers, InputStream content)
             throws UFileServiceException
     {
+        // 解析Content-Range
+        // 格式： bytes 0-31/24135125
+        Long rangeOffset = 0L;
+        String contentRange = getContentRange(headers);
+        if (contentRange != null) {
+            Pattern r = Pattern.compile(CONTENT_RANGE_REGEX);
+            Matcher matcher = r.matcher(contentRange);
+            if (matcher.find()) {
+                rangeOffset = Long.valueOf(matcher.group(1));
+            }
+        }
+
         UObject object = new UObject();
-        object.setObjectKey(objectKey);
-        object.setObjectContent(new UObjectInputStream(content));
+        object.setBucketName(this.getBucketName());
+        object.setObjectKey(this.getObjectKey());
+        object.setObjectContent(new UObjectInputStream(content, rangeOffset));
         object.setObjectMetadata(new UObjectMetadata(headers));
         this.object = object;
     }

@@ -13,17 +13,28 @@
  */
 package com.sidooo.ufile.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class UObjectInputStream
-        extends InputStream
+        extends FilterInputStream
 {
-    protected volatile InputStream in;
+    /**
+     * 数据流在整个对象中的偏移
+     */
+    private long rangeOffset = 0;
 
-    public UObjectInputStream(InputStream in)
+    public UObjectInputStream(InputStream in, long rangeOffset)
     {
-        this.in = in;
+        super(in);
+        this.rangeOffset = rangeOffset;
+    }
+
+    public long getRangeOffset()
+    {
+        return this.rangeOffset;
     }
 
     @Override
@@ -31,5 +42,11 @@ public class UObjectInputStream
             throws IOException
     {
         return in.read();
+    }
+
+    @Override
+    public int available() throws IOException {
+        int estimate = super.available();
+        return estimate == 0 ? 1 : estimate;
     }
 }

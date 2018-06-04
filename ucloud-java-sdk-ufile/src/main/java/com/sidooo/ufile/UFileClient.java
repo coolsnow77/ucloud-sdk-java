@@ -142,6 +142,16 @@ public class UFileClient
     }
 
     @Override
+    public UObject getObject(String bucketName, String key, long offset, int length)
+            throws UFileClientException, UFileServiceException
+    {
+        String range = String.format("bytes=%d-%d", offset, offset+ length - 1);
+        GetObjectRequest request = new GetObjectRequest(region, bucketName, key, range);
+        objectExecutor.execute(request, key);
+        return request.getObject();
+    }
+
+    @Override
     public UObjectMetadata getObject(String bucketName, String key, File destinationFile)
             throws UFileClientException, UFileServiceException
     {

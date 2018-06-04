@@ -28,6 +28,10 @@ public class UObject
 
     private transient UObjectInputStream objectContent;
 
+    private Long objectRangeOffset;
+
+    private int objectRangeLength;
+
     private UObjectMetadata objectMetadata;
 
     private String hash;

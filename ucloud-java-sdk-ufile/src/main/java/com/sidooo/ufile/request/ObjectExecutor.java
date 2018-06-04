@@ -129,7 +129,7 @@ public class ObjectExecutor
                     httpRequest = new HttpHead(builder.build());
             }
 
-            for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
+            for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
                 httpRequest.addHeader(entry.getKey(), entry.getValue());
             }
             // 计算API的签名
@@ -196,6 +196,14 @@ public class ObjectExecutor
             }
             else if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 request.onSuccess(null, httpResponse.getAllHeaders(), null);
+            }
+            else if (httpResponse.getStatusLine().getStatusCode() == 206) {
+                // 请求对象部分数据
+                HttpEntity resEntity = httpResponse.getEntity();
+                if (resEntity == null) {
+                    request.onSuccess(null, httpResponse.getAllHeaders(), null);
+                }
+                request.onSuccess(null, httpResponse.getAllHeaders(), cloneContent(resEntity.getContent()));
             }
             else {
                 // 服务器返回错误
