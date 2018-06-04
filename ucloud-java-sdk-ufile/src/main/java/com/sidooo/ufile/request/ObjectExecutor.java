@@ -25,6 +25,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -47,7 +48,6 @@ public class ObjectExecutor
         extends AbstractExcector
 {
     public static final String AUTHORIZATION = "Authorization";
-    private static final String CANONICAL_PREFIX = "X-UCloud";
 
     public ObjectExecutor(UFileCredentials credentials)
     {
@@ -84,47 +84,10 @@ public class ObjectExecutor
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    public String spliceCanonicalHeaders(UObjectRequest request)
-    {
-        Map<String, String> headers = request.getHeaders();
-        Map<String, String> sortedMap = new TreeMap<String, String>();
-
-        if (headers != null) {
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                if (entry.getKey().startsWith(CANONICAL_PREFIX)) {
-                    sortedMap.put(entry.getKey().toLowerCase(), entry.getValue());
-                }
-            }
-            String result = "";
-            for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
-                result += entry.getKey() + ":" + entry.getValue() + "\n";
-            }
-            return result;
-        }
-        else {
-            return "";
-        }
-    }
-
-    private String updateSignature(UObjectRequest request, String objectkey)
-    {
-        String contentMD5 = request.getContentMD5();
-        String contentType = request.getContentType();
-        String date = request.getDate();
-        String canonicalizedUcloudHeaders = spliceCanonicalHeaders(request);
-        String canonicalizedResource = "/" + request.getBucketName() + "/" + objectkey;
-        String stringToSign = request.getHttpType() + "\n" + contentMD5 + "\n" + contentType + "\n" + date + "\n" +
-                canonicalizedUcloudHeaders + canonicalizedResource;
-        String signature = new HmacSHA1().sign(getCredentials().getPrivateKey(), stringToSign);
-        return "UCloud" + " " + getCredentials().getPublicKey() + ":" + signature;
-    }
 
     public void execute(UObjectRequest request, String objectKey)
             throws UFileClientException
     {
-        // 计算API的签名
-        String signature = updateSignature(request, objectKey);
-
         // 生成Http请求
         HttpUriRequest httpRequest = null;
         try {
@@ -140,6 +103,9 @@ public class ObjectExecutor
                         + "/?list";
             }
             URIBuilder builder = new URIBuilder(uri);
+            for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
+                builder.setParameter(entry.getKey(), entry.getValue());
+            }
             switch (request.getHttpType()) {
                 case GET:
                     httpRequest = new HttpGet(builder.build());
@@ -149,6 +115,7 @@ public class ObjectExecutor
                     break;
                 case DELETE:
                     httpRequest = new HttpDelete(builder.build());
+                    break;
                 case PUT:
                     HttpPut put = new HttpPut(builder.build());
                     if (request.getObjectStream() != null) {
@@ -157,12 +124,17 @@ public class ObjectExecutor
                         put.setEntity(entity);
                     }
                     httpRequest = put;
+                    break;
+                case HEAD:
+                    httpRequest = new HttpHead(builder.build());
             }
 
             for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
                 httpRequest.addHeader(entry.getKey(), entry.getValue());
             }
-            httpRequest.addHeader(AUTHORIZATION, updateSignature(request, objectKey));
+            // 计算API的签名
+            String signature = UFileSignatureBuilder.getSignature(request, objectKey, getCredentials());
+            httpRequest.addHeader(AUTHORIZATION, signature);
         }
         catch (UnsupportedEncodingException e) {
             throw new UFileClientException("URI Encode Error.", e);

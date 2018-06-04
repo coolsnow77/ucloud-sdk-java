@@ -37,7 +37,7 @@ public class UObjectListing
      * populated if the isTruncated member indicates that this object listing is
      * truncated
      */
-    private String nextMarker;
+    private String nextMarker = "";
 
     /**
      * Indicates if this is a complete listing, or if the caller needs to make

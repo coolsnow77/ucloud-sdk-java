@@ -1,6 +1,7 @@
-package com.sidooo.ufile.request;
+package com.sidooo.ucloud;
 
 import com.sidooo.ufile.UFileCredentials;
+import com.sidooo.ufile.request.UBucketRequest;
 
 import java.net.URLEncoder;
 import java.security.MessageDigest;

@@ -22,6 +22,8 @@ import java.io.InputStream;
 public class DeleteObjectRequest
         extends UObjectRequest
 {
+    private String deletedObjectKey;
+
     public DeleteObjectRequest(String region, String bucketName, String objectKey)
     {
         super(HttpType.DELETE, region, bucketName);
@@ -32,10 +34,11 @@ public class DeleteObjectRequest
     public void onSuccess(JsonObject response, Header[] headers, InputStream content)
             throws UFileServiceException
     {
+        deletedObjectKey = this.getObjectKey();
     }
 
     public String getDeleteObjectKey()
     {
-        return null;
+        return deletedObjectKey;
     }
 }

@@ -103,10 +103,7 @@ public abstract class UObjectRequest
     public String getContentType()
     {
         String contentType = getHeader(CONTENT_TYPE);
-        if (contentType != null) {
-            return contentType;
-        }
-        return null;
+        return contentType == null ? "" : contentType;
 //        else if (this.filePath != null) {
 //            String contentType = UFileRequest.mm.getMime(this.filePath);
 //            this.setContentType(contentType);
@@ -119,12 +116,14 @@ public abstract class UObjectRequest
 
     public String getContentMD5()
     {
-        return getHeader(CONTENT_MD5);
+        String contentMd5 = getHeader(CONTENT_MD5);
+        return contentMd5 == null ? "" : contentMd5;
     }
 
     public String getDate()
     {
-        return getHeader(DATE);
+        String date = getHeader(DATE);
+        return date == null ? "" : date;
     }
 
     public InputStream getObjectStream()

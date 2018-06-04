@@ -13,10 +13,7 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ufile.request.CreateBucketRequest;
-import com.sidooo.ufile.request.HttpType;
-import com.sidooo.ufile.request.UBucketRequest;
-import com.sidooo.ufile.request.UCloudSignatureBuilder;
+import com.sidooo.ucloud.UCloudSignatureBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

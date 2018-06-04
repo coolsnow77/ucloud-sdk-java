@@ -57,8 +57,7 @@ public class ListObjectRequest
     public ListObjectRequest(String region, String bucketName,
             String prefix)
     {
-        super(HttpType.GET, region, bucketName);
-        this.prefix = prefix;
+        this(region, bucketName, prefix, 20);
     }
 
     public ListObjectRequest(String region, String bucketName,
@@ -66,6 +65,7 @@ public class ListObjectRequest
     {
         super(HttpType.GET, region, bucketName);
         this.prefix = prefix;
+        this.limit = limit;
         this.addParameter("limit", Integer.toString(limit));
     }
 
