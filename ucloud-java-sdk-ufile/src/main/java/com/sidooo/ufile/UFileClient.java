@@ -45,6 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static java.util.Objects.requireNonNull;
+
 public class UFileClient
         implements UFile
 {
@@ -102,6 +104,8 @@ public class UFileClient
     public UBucket createBucket(String bucketName, String type)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(type, "bucketType is null");
         CreateBucketRequest request = new CreateBucketRequest(region, bucketName, type);
         bucketExecutor.execute(request);
         return request.getNewBucket();
@@ -111,6 +115,7 @@ public class UFileClient
     public UBucket getBucket(String bucketName)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
         GetBucketRequest request = new GetBucketRequest(region, bucketName);
         bucketExecutor.execute(request);
         return request.getBucket();
@@ -129,6 +134,7 @@ public class UFileClient
     public String deleteBucket(String bucketName)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
         DeleteBucketRequest request = new DeleteBucketRequest(region, bucketName);
         bucketExecutor.execute(request);
         return request.getDeletedBucketId();
@@ -138,6 +144,8 @@ public class UFileClient
     public UObject getObject(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "key is null");
         GetObjectRequest request = new GetObjectRequest(region, bucketName, key);
         objectExecutor.execute(request, key);
         return request.getObject();
@@ -147,6 +155,8 @@ public class UFileClient
     public UObject getObject(String bucketName, String key, long offset, int length)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
         String range = String.format("bytes=%d-%d", offset, offset + length - 1);
         GetObjectRequest request = new GetObjectRequest(region, bucketName, key, range);
         objectExecutor.execute(request, key);
@@ -157,6 +167,9 @@ public class UFileClient
     public UObjectMetadata getObject(String bucketName, String key, File destinationFile)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+
         UObject object = getObject(bucketName, key);
 
         InputStream inputStream = null;
@@ -195,6 +208,9 @@ public class UFileClient
     public String getObjectAsString(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+
         UObject object = getObject(bucketName, key);
         InputStream content = object.getObjectContent();
         if (content != null) {
@@ -221,6 +237,9 @@ public class UFileClient
     public UObjectMetadata getObjectMetadata(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+
         GetObjectMetaRequest request = new GetObjectMetaRequest(region, bucketName, key);
         objectExecutor.execute(request, key);
         return request.getObjectMetadata();
@@ -230,6 +249,10 @@ public class UFileClient
     public UObjectMetadata putObject(String bucketName, String key, File file)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+        requireNonNull(file, "targetFile is null");
+
         InputStream objectStream;
         try {
             objectStream = new FileInputStream(file);
@@ -246,6 +269,8 @@ public class UFileClient
     public UObjectListing listObjects(String bucketName, String prefix, Integer limit)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+
         ListObjectRequest request = new ListObjectRequest(region, bucketName, prefix, limit);
         objectExecutor.execute(request, "");
         return request.getObjectListing();
@@ -271,6 +296,9 @@ public class UFileClient
     public String deleteObject(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+
         DeleteObjectRequest request = new DeleteObjectRequest(region, bucketName, key);
         objectExecutor.execute(request, key);
         return request.getDeleteObjectKey();
@@ -279,7 +307,11 @@ public class UFileClient
     @Override
     public void shutdown()
     {
-        objectExecutor.close();
-        bucketExecutor.close();
+        if (objectExecutor != null) {
+            objectExecutor.close();
+        }
+        if (bucketExecutor != null) {
+            bucketExecutor.close();
+        }
     }
 }

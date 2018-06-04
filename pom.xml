@@ -10,7 +10,7 @@
 
     <groupId>com.sidooo</groupId>
     <artifactId>ucloud-java-sdk-root</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>pom</packaging>
 
     <name>ucloud-java-sdk-root</name>
@@ -28,9 +28,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/analyst004/ucloud-sdk-java.git</connection>
-        <url>https://github.com/analyst004/ucloud-sdk-java</url>
-        <tag>1.0</tag>
+        <connection>scm:git:git://github.com/sidooo/ucloud-sdk-java.git</connection>
+        <url>https://github.com/sidooo/ucloud-sdk-java</url>
+        <tag>1.1</tag>
     </scm>
 
     <developers>
