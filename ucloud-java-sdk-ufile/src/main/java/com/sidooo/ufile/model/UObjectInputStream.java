@@ -13,7 +13,6 @@
  */
 package com.sidooo.ufile.model;
 
-import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +23,7 @@ public class UObjectInputStream
     /**
      * 数据流在整个对象中的偏移
      */
-    private long rangeOffset = 0;
+    private long rangeOffset;
 
     public UObjectInputStream(InputStream in, long rangeOffset)
     {
@@ -45,7 +44,9 @@ public class UObjectInputStream
     }
 
     @Override
-    public int available() throws IOException {
+    public int available()
+            throws IOException
+    {
         int estimate = super.available();
         return estimate == 0 ? 1 : estimate;
     }

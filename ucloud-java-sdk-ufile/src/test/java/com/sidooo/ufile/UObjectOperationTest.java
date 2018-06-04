@@ -13,8 +13,7 @@
  */
 package com.sidooo.ufile;
 
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.model.UObject;
 import com.sidooo.ufile.model.UObjectInputStream;
 import com.sidooo.ufile.model.UObjectListing;
@@ -26,7 +25,6 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * 删除文件测试
@@ -38,7 +36,6 @@ public class UObjectOperationTest
     static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
     static final String LOCAL_TEST_FILE = "/Users/kimzhang/Downloads/test.pdf";
     private UFileCredentials credentials;
-    private String region = "cn-bj";
     private UFile ufile;
     static final String TEST_BUCKET = "usql";
     static final String TEST_KEY = "test.pdf";
@@ -48,7 +45,7 @@ public class UObjectOperationTest
     {
         credentials = new UFileCredentials();
         credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(credentials, region);
+        ufile = UFileClientBuilder.standard(credentials, Region.CN_BJ2);
     }
 
     @After
@@ -116,12 +113,13 @@ public class UObjectOperationTest
      * 测试文件偏移读写UFile Object
      */
     @Test(expected = Test.None.class)
-    public void test3() throws Exception
+    public void test3()
+            throws Exception
     {
-        UObject object = ufile.getObject(TEST_BUCKET, "part.tbl", 32, 32);
+        UObject object = ufile.getObject("tpc", "tpch-s1/part.tbl", 32, 32);
         UObjectInputStream stream = object.getObjectContent();
-        assertEquals(TEST_BUCKET, object.getBucketName());
-        assertEquals("part.tbl", object.getObjectKey());
+        assertEquals("tpc", object.getBucketName());
+        assertEquals("tpch-s1/part.tbl", object.getObjectKey());
         int length = stream.available();
         assertEquals(32, length);
         byte[] buffer = new byte[32];

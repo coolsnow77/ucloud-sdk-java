@@ -13,6 +13,10 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Region;
+
+import static com.sidooo.ucloud.Region.CN_BJ2;
+
 public class UFileClientBuilder
 {
     private UFileClientBuilder() {}
@@ -21,10 +25,10 @@ public class UFileClientBuilder
     public static UFile defaultClient()
     {
         UFileCredentials credentials = new UFileCredentials();
-        return standard(credentials, "cn-bj");
+        return standard(credentials, CN_BJ2);
     }
 
-    public static UFile standard(UFileCredentials credentials, String defaultRegion)
+    public static UFile standard(UFileCredentials credentials, Region defaultRegion)
     {
         return new UFileClient(credentials).setRegion(defaultRegion);
     }

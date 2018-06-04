@@ -15,6 +15,7 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
@@ -32,12 +33,12 @@ public class ListBucketRequest
     // 输出结果
     private UBucketListing buckets;
 
-    public ListBucketRequest(String region)
+    public ListBucketRequest(Region region)
     {
         this(region, 0, 20);
     }
 
-    public ListBucketRequest(String region, int offset, int limit)
+    public ListBucketRequest(Region region, int offset, int limit)
     {
         super(HttpType.GET, "DescribeBucket", region);
         this.offset = offset;

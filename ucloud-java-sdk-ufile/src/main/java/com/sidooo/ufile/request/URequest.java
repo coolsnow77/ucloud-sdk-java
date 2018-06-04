@@ -14,6 +14,7 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import org.apache.http.Header;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 
 public abstract class URequest
 {
-    private final String region;
+    private final Region region;
 
     private final HttpType httpType;
 
@@ -37,13 +38,13 @@ public abstract class URequest
      */
     private Map<String, String> headers = new HashMap<String, String>();
 
-    public URequest(HttpType httpType, String region)
+    public URequest(HttpType httpType, Region region)
     {
         this.httpType = httpType;
         this.region = region;
     }
 
-    public String getRegion()
+    public Region getRegion()
     {
         return this.region;
     }

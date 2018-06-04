@@ -15,6 +15,7 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 import org.apache.http.Header;
@@ -27,7 +28,7 @@ public class GetBucketRequest
     // 输出结果
     private UBucket bucket;
 
-    public GetBucketRequest(String region, String bucketName)
+    public GetBucketRequest(Region region, String bucketName)
     {
         super(HttpType.GET, "DescribeBucket", region);
         this.addParameter("BucketName", bucketName);

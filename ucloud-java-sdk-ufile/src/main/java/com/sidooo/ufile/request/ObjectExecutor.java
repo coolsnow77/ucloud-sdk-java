@@ -15,7 +15,6 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sidooo.ufile.HmacSHA1;
 import com.sidooo.ufile.UFileCredentials;
 import com.sidooo.ufile.UFileHeaders;
 import com.sidooo.ufile.exception.UFileClientException;
@@ -42,7 +41,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class ObjectExecutor
         extends AbstractExcector
@@ -83,7 +81,6 @@ public class ObjectExecutor
         // Can be repeated as many times as you wish
         return new ByteArrayInputStream(baos.toByteArray());
     }
-
 
     public void execute(UObjectRequest request, String objectKey)
             throws UFileClientException

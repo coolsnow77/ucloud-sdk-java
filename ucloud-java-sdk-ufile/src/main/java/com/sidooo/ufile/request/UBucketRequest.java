@@ -13,10 +13,12 @@
  */
 package com.sidooo.ufile.request;
 
+import com.sidooo.ucloud.Region;
+
 public abstract class UBucketRequest
         extends URequest
 {
-    public UBucketRequest(HttpType httpType, String actionName, String region)
+    public UBucketRequest(HttpType httpType, String actionName, Region region)
     {
         super(httpType, region);
         this.addParameter("Action", actionName);

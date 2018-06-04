@@ -14,6 +14,7 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import org.apache.http.Header;
 
@@ -24,7 +25,7 @@ public class DeleteBucketRequest
 {
     private String bucketId;
 
-    public DeleteBucketRequest(String region, String bucketName)
+    public DeleteBucketRequest(Region region, String bucketName)
     {
         super(HttpType.DELETE, "DeleteBucket", region);
         this.addParameter("BucketName", bucketName);

@@ -16,6 +16,7 @@ package com.sidooo.ufile.request;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectListing;
 import com.sidooo.ufile.model.UObjectSummary;
@@ -54,13 +55,13 @@ public class ListObjectRequest
 
     private UObjectListing objectListing;
 
-    public ListObjectRequest(String region, String bucketName,
+    public ListObjectRequest(Region region, String bucketName,
             String prefix)
     {
         this(region, bucketName, prefix, 20);
     }
 
-    public ListObjectRequest(String region, String bucketName,
+    public ListObjectRequest(Region region, String bucketName,
             String prefix, int limit)
     {
         super(HttpType.GET, region, bucketName);
@@ -69,7 +70,7 @@ public class ListObjectRequest
         this.addParameter("limit", Integer.toString(limit));
     }
 
-    public ListObjectRequest(String region, String bucketName,
+    public ListObjectRequest(Region region, String bucketName,
             String prefix, int limit, String marker)
     {
         super(HttpType.GET, region, bucketName);

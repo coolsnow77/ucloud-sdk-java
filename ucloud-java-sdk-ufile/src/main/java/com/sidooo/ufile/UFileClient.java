@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -48,7 +49,8 @@ public class UFileClient
         implements UFile
 {
     private final UFileCredentials credentials;
-    private String region;
+
+    private Region region;
 
     private BucketExecutor bucketExecutor;
 
@@ -68,13 +70,13 @@ public class UFileClient
     }
 
     @Override
-    public String getRegion()
+    public Region getRegion()
     {
         return region;
     }
 
     @Override
-    public UFile setRegion(String region)
+    public UFile setRegion(Region region)
     {
         this.region = region;
         return this;
@@ -97,7 +99,7 @@ public class UFileClient
 //    }
 
     @Override
-    public UBucket createBucket(String bucketName, String type, String region)
+    public UBucket createBucket(String bucketName, String type)
             throws UFileClientException, UFileServiceException
     {
         CreateBucketRequest request = new CreateBucketRequest(region, bucketName, type);
@@ -145,7 +147,7 @@ public class UFileClient
     public UObject getObject(String bucketName, String key, long offset, int length)
             throws UFileClientException, UFileServiceException
     {
-        String range = String.format("bytes=%d-%d", offset, offset+ length - 1);
+        String range = String.format("bytes=%d-%d", offset, offset + length - 1);
         GetObjectRequest request = new GetObjectRequest(region, bucketName, key, range);
         objectExecutor.execute(request, key);
         return request.getObject();

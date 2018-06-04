@@ -13,6 +13,8 @@
  */
 package com.sidooo.ufile.request;
 
+import com.sidooo.ucloud.Region;
+
 import java.io.InputStream;
 
 public abstract class UObjectRequest
@@ -49,7 +51,7 @@ public abstract class UObjectRequest
 
     private Long contentLength = Long.valueOf(-1);
 
-    public UObjectRequest(HttpType httpType, String region, String bucketName)
+    public UObjectRequest(HttpType httpType, Region region, String bucketName)
     {
         super(httpType, region);
         this.bucketName = bucketName;

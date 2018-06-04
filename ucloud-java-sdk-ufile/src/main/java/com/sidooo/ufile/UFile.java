@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -30,21 +31,20 @@ public interface UFile
 
     HttpClient getHttpClient();
 
-    String getRegion();
+    Region getRegion();
 
-    UFile setRegion(String region);
+    UFile setRegion(Region region);
 
     /**
      * 创建UFile Bucket
      *
      * @param bucketName
      * @param type
-     * @param region
      * @return
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UBucket createBucket(String bucketName, String type, String region)
+    UBucket createBucket(String bucketName, String type)
             throws UFileClientException, UFileServiceException;
 
     /**

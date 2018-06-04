@@ -14,6 +14,7 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
@@ -25,7 +26,7 @@ public class GetObjectMetaRequest
 {
     private UObjectMetadata objectMetadata;
 
-    public GetObjectMetaRequest(String region, String bucketName, String objectKey)
+    public GetObjectMetaRequest(Region region, String bucketName, String objectKey)
     {
         super(HttpType.HEAD, region, bucketName);
         this.setObjectKey(objectKey);

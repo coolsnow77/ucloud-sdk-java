@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
 import org.junit.After;
@@ -36,7 +37,7 @@ public class UBucketOperationTest
     {
         credentials = new UFileCredentials();
         credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(credentials, "cn-bj");
+        ufile = UFileClientBuilder.standard(credentials, Region.CN_BJ2);
     }
 
     @After
@@ -65,7 +66,7 @@ public class UBucketOperationTest
         UBucketListing buckets = ufile.listBuckets();
 
         // 创建bucket
-        UBucket newBucket = ufile.createBucket(bucketName, "public", "cn-bj");
+        UBucket newBucket = ufile.createBucket(bucketName, "public");
         assertEquals(newBucket.getName(), bucketName);
 
         // 获取bucket信息
