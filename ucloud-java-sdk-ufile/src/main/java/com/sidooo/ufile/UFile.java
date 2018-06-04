@@ -30,6 +30,10 @@ public interface UFile
 
     HttpClient getHttpClient();
 
+    String getRegion();
+
+    UFile setRegion(String region);
+
     UBucket createBucket(String bucketName, String type, String region)
             throws UFileClientException, UFileServiceException;
 

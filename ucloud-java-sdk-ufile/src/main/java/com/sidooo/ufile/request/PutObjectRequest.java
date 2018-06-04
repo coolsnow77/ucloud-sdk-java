@@ -14,20 +14,11 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.InputStreamEntity;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 
 /*
  * Request Parameters
@@ -52,73 +43,41 @@ import java.net.URLEncoder;
 public class PutObjectRequest
         extends UObjectRequest
 {
-    private String objectKey;
-    private InputStream objectStream;
-    private Long objectLength;
-    private String objectType;
-    private String objectMd5;
-
     private UObjectMetadata newObjectMetadata;
 
-    public PutObjectRequest(UFileCredentials credentials, String bucketName,
+    public PutObjectRequest(String region, String bucketName,
             String objectKey, InputStream objectStream, Long objectLength)
     {
-        super(credentials, bucketName);
-        this.objectKey = objectKey;
-        this.objectStream = objectStream;
-        this.objectLength = objectLength;
+        super(HttpType.PUT, region, bucketName);
+        this.setObjectKey(objectKey);
+        this.setObjectStream(objectStream);
+        this.setObjectStreamLength(objectLength);
     }
 
-    public PutObjectRequest(UFileCredentials credentials, String bucketName,
+    public PutObjectRequest(String region, String bucketName,
             String objectKey, InputStream objectStream, Long objectLength, String objectType)
     {
-        super(credentials, bucketName);
-        this.objectKey = objectKey;
-        this.objectStream = objectStream;
-        this.objectLength = objectLength;
-        this.objectType = objectType;
+        super(HttpType.PUT, region, bucketName);
+        this.setObjectKey(objectKey);
+        this.addHeader("Content-Type", objectType);
+        this.setObjectStream(objectStream);
+        this.setObjectStreamLength(objectLength);
     }
 
-    public PutObjectRequest(UFileCredentials credentials, String bucketName,
+    public PutObjectRequest(String region, String bucketName,
             String objectKey, InputStream objectStream, Long objectLength, String objectType, String objectMd5)
     {
-        super(credentials, bucketName);
-        this.objectKey = objectKey;
-        this.objectStream = objectStream;
-        this.objectLength = objectLength;
-        this.objectType = objectType;
-        this.objectMd5 = objectMd5;
+        super(HttpType.PUT, region, bucketName);
+        this.setObjectKey(objectKey);
+        this.addHeader("Content-Type", objectType);
+        this.addHeader("Content-MD5", objectMd5);
+        this.setObjectStream(objectStream);
+        this.setObjectStreamLength(objectLength);
     }
 
     @Override
-    public HttpUriRequest createHttpRequest() throws UFileClientException
-    {
-        try {
-            String uri = "http://"
-                    + getBucketName() + getCredentials().getProxySuffix()
-                    + "/" + URLEncoder.encode(objectKey, "UTF-8");
-            URIBuilder builder = new URIBuilder(uri);
-            HttpPut request = new HttpPut(builder.build());
-            if (objectType != null) {
-                request.addHeader("Content-Type", objectType);
-            }
-            if (objectMd5 != null) {
-                request.addHeader("Content-MD5", objectMd5);
-            }
-            InputStreamEntity reqEntity = new InputStreamEntity(objectStream, objectLength);
-            request.setEntity(reqEntity);
-            return request;
-        }
-        catch (UnsupportedEncodingException e) {
-            throw new UFileClientException("URI Encode Error.", e);
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("URI Syntax Error.", e);
-        }
-    }
-
-    @Override
-    public void onSuccess(JsonObject response, Header[] headers, InputStream content) throws UFileServiceException
+    public void onSuccess(JsonObject response, Header[] headers, InputStream content)
+            throws UFileServiceException
     {
         newObjectMetadata = new UObjectMetadata(headers);
     }

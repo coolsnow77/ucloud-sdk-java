@@ -33,8 +33,9 @@ public class UObjectOperationTest
     static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
     static final String LOCAL_TEST_FILE = "/Users/kimzhang/Downloads/test.pdf";
     private UFileCredentials credentials;
+    private String region = "cn-bj";
     private UFile ufile;
-    static final String TEST_BUCKET = "usql-unittest";
+    static final String TEST_BUCKET = "usql";
     static final String TEST_KEY = "test.pdf";
 
     @Before
@@ -42,7 +43,7 @@ public class UObjectOperationTest
     {
         credentials = new UFileCredentials();
         credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(credentials);
+        ufile = UFileClientBuilder.standard(region, credentials);
     }
 
     @After

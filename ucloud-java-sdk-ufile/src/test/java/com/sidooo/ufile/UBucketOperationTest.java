@@ -28,6 +28,7 @@ public class UBucketOperationTest
     static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
     static final String LOCAL_TEST_FILE = "/Users/kimzhang/Downloads/Jenkins2.png";
     private UFileCredentials credentials;
+    private String region = "cn-bj2";
     private UFile ufile;
     static final String TEST_BUCKET_NAME = "ufile-sdk-test";
 
@@ -36,7 +37,7 @@ public class UBucketOperationTest
     {
         credentials = new UFileCredentials();
         credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(credentials);
+        ufile = UFileClientBuilder.standard(region, credentials);
     }
 
     @After

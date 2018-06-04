@@ -13,29 +13,14 @@
  */
 package com.sidooo.ufile.request;
 
-import com.google.gson.JsonObject;
-import com.sidooo.ufile.exception.UFileServiceException;
-import org.apache.http.Header;
-
-import java.io.InputStream;
-
-public class DeleteObjectRequest
-        extends UObjectRequest
+public enum HttpType
 {
-    public DeleteObjectRequest(String region, String bucketName, String objectKey)
-    {
-        super(HttpType.DELETE, region, bucketName);
-        this.setObjectKey(objectKey);
-    }
+    GET("GET"), POST("POST"), DELETE("DELETE"), PUT("PUT"), HEAD("HEAD");
 
-    @Override
-    public void onSuccess(JsonObject response, Header[] headers, InputStream content)
-            throws UFileServiceException
-    {
-    }
+    String type;
 
-    public String getDeleteObjectKey()
+    HttpType(String type)
     {
-        return null;
+        this.type = type;
     }
 }

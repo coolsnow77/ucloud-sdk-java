@@ -14,51 +14,21 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 
 public class GetObjectMetaRequest
         extends UObjectRequest
 {
-    private String objectKey;
-
     private UObjectMetadata objectMetadata;
 
-    public GetObjectMetaRequest(UFileCredentials credentials, String bucketName, String objectKey)
+    public GetObjectMetaRequest(String region, String bucketName, String objectKey)
     {
-        super(credentials, bucketName);
-        this.objectKey = objectKey;
-    }
-
-    @Override
-    HttpUriRequest createHttpRequest()
-            throws UFileClientException
-    {
-        try {
-            String uri = "http://"
-                    + getBucketName() + getCredentials().getDownloadProxySuffix()
-                    + "/" + URLEncoder.encode(objectKey, "UTF-8");
-            URIBuilder builder = new URIBuilder(uri);
-            HttpHead head = new HttpHead(builder.build());
-            return head;
-        }
-        catch (UnsupportedEncodingException e) {
-            throw new UFileClientException("URI Encode Error.", e);
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("URI Syntax Error.", e);
-        }
+        super(HttpType.HEAD, region, bucketName);
+        this.setObjectKey(objectKey);
     }
 
     @Override

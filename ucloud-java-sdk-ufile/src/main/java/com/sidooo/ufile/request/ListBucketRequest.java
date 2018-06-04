@@ -15,16 +15,12 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.Header;
 
-import java.net.URISyntaxException;
+import java.io.InputStream;
 
 public class ListBucketRequest
         extends UBucketRequest
@@ -36,33 +32,20 @@ public class ListBucketRequest
     // 输出结果
     private UBucketListing buckets;
 
-    public ListBucketRequest(UFileCredentials credentials)
+    public ListBucketRequest(String region)
     {
-        super(credentials, "DescribeBucket");
+        this(region, 0, 20);
     }
 
-    public ListBucketRequest(UFileCredentials credentials, int offset, int limit)
+    public ListBucketRequest(String region, int offset, int limit)
     {
-        super(credentials, "DescribeBucket");
+        super(HttpType.GET, "DescribeBucket", region);
         this.offset = offset;
         this.limit = limit;
     }
 
     @Override
-    public HttpUriRequest createHttpRequest()
-            throws UFileClientException
-    {
-        try {
-            URIBuilder builder = new URIBuilder("https://" + UCLOUD_API_HOST);
-            return new HttpGet(builder.build());
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("Create Http Request Error.", e);
-        }
-    }
-
-    @Override
-    public void onSuccess(JsonObject json)
+    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
             throws UFileServiceException
     {
         if (!json.has("DataSet")) {

@@ -13,45 +13,79 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ufile.UFileCredentials;
+import com.google.gson.JsonObject;
+import com.sidooo.ufile.exception.UFileServiceException;
+import org.apache.http.Header;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-public class URequest
+public abstract class URequest
 {
-    private UFileCredentials credentials;
+    private final String region;
 
-    public URequest(UFileCredentials credentials)
+    private final HttpType httpType;
+
+    /**
+     * 请求的URL Parameters
+     */
+    private Map<String, String> parameters = new HashMap<String, String>();
+
+    /**
+     * 请求的URL Headers
+     */
+    private Map<String, String> headers = new HashMap<String, String>();
+
+    public URequest(HttpType httpType, String region)
     {
-        this.credentials = credentials;
+        this.httpType = httpType;
+        this.region = region;
     }
 
-    public UFileCredentials getCredentials()
+    public String getRegion()
     {
-        return this.credentials;
+        return this.region;
     }
 
-    public String getContentAsString(InputStream content)
+    public HttpType getHttpType()
     {
-        if (content != null) {
-            // Error Message
-            try {
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = content.read(buffer)) != -1) {
-                    result.write(buffer, 0, length);
-                }
-                return result.toString("UTF-8");
-            }
-            catch (IOException e) {
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
+        return this.httpType;
     }
+
+    public void addParameter(String name, String value)
+    {
+        this.parameters.put(name, value);
+    }
+
+    public Map<String, String> getParameters()
+    {
+        return this.parameters;
+    }
+
+    public void addHeader(String name, String value)
+    {
+        this.headers.put(name, value);
+    }
+
+    public Map<String, String> getHeaders()
+    {
+        return this.headers;
+    }
+
+    public String getHeader(String name)
+    {
+        return headers.get(name);
+    }
+
+    public void setHeaders(Map<String, String> headers)
+    {
+        this.headers = headers;
+    }
+
+    /*
+     * API请求成功后的处理函数
+     */
+    abstract void onSuccess(JsonObject response, Header[] headers, InputStream content)
+            throws UFileServiceException;
 }

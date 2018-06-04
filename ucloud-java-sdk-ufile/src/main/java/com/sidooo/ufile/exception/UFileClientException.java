@@ -14,7 +14,7 @@
 package com.sidooo.ufile.exception;
 
 public class UFileClientException
-        extends Exception
+        extends RuntimeException
 {
     public UFileClientException(String message, Throwable t)
     {

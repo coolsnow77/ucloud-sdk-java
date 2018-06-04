@@ -16,18 +16,12 @@ package com.sidooo.ufile.request;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectListing;
 import com.sidooo.ufile.model.UObjectSummary;
 import org.apache.http.Header;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
 
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.Date;
 
 /*
@@ -60,49 +54,28 @@ public class ListObjectRequest
 
     private UObjectListing objectListing;
 
-    public ListObjectRequest(UFileCredentials credentials, String bucketName,
+    public ListObjectRequest(String region, String bucketName,
             String prefix)
     {
-        super(credentials, bucketName);
+        super(HttpType.GET, region, bucketName);
         this.prefix = prefix;
     }
 
-    public ListObjectRequest(UFileCredentials credentials, String bucketName,
+    public ListObjectRequest(String region, String bucketName,
             String prefix, int limit)
     {
-        super(credentials, bucketName);
+        super(HttpType.GET, region, bucketName);
         this.prefix = prefix;
-        this.limit = limit;
+        this.addParameter("limit", Integer.toString(limit));
     }
 
-    public ListObjectRequest(UFileCredentials credentials, String bucketName,
+    public ListObjectRequest(String region, String bucketName,
             String prefix, int limit, String marker)
     {
-        super(credentials, bucketName);
+        super(HttpType.GET, region, bucketName);
         this.prefix = prefix;
-        this.marker = marker;
-        this.limit = limit;
-    }
-
-    @Override
-    public HttpUriRequest createHttpRequest()
-            throws UFileClientException
-    {
-        try {
-            String uri = "http://"
-                    + getBucketName() + getCredentials().getProxySuffix()
-                    + "/?list";
-            URIBuilder builder = new URIBuilder(uri);
-            if (marker != null) {
-                builder.setParameter("marker", marker);
-            }
-            builder.setParameter("limit", Integer.toString(limit));
-            HttpGet request = new HttpGet(builder.build());
-            return request;
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("URI Syntax Error.", e);
-        }
+        this.addParameter("marker", marker);
+        this.addParameter("limit", Integer.toString(limit));
     }
 
     @Override

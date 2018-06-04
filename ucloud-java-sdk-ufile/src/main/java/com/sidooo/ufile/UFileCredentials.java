@@ -30,9 +30,10 @@ public class UFileCredentials
         return this.publicKey;
     }
 
-    public void setPublicKey(String publicKey)
+    public UFileCredentials setPublicKey(String publicKey)
     {
         this.publicKey = publicKey;
+        return this;
     }
 
     public String getPrivateKey()
@@ -40,9 +41,10 @@ public class UFileCredentials
         return this.privateKey;
     }
 
-    public void setPrivateKey(String privateKey)
+    public UFileCredentials setPrivateKey(String privateKey)
     {
         this.privateKey = privateKey;
+        return this;
     }
 
     public String getProxySuffix()
@@ -50,9 +52,10 @@ public class UFileCredentials
         return this.proxySuffix;
     }
 
-    public void setProxySuffix(String proxySuffix)
+    public UFileCredentials setProxySuffix(String proxySuffix)
     {
         this.proxySuffix = proxySuffix;
+        return this;
     }
 
     public String getDownloadProxySuffix()
@@ -60,9 +63,10 @@ public class UFileCredentials
         return this.downloadProxySuffix;
     }
 
-    public void setDownloadProxySuffix(String downloadProxySuffix)
+    public UFileCredentials setDownloadProxySuffix(String downloadProxySuffix)
     {
         this.downloadProxySuffix = downloadProxySuffix;
+        return this;
     }
 
     public void makeAuth(String stringToSign, UFileRequest request)

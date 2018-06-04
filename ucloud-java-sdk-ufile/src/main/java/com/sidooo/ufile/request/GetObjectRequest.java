@@ -14,22 +14,13 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObject;
 import com.sidooo.ufile.model.UObjectInputStream;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-
 /*
  *
  * Request Parameters
@@ -60,40 +51,17 @@ public class GetObjectRequest
 
     private UObject object;
 
-    public GetObjectRequest(UFileCredentials credentials, String bucketName, String objectKey)
+    public GetObjectRequest(String region, String bucketName, String objectKey)
     {
-        super(credentials, bucketName);
-        this.objectKey = objectKey;
+        super(HttpType.GET, region, bucketName);
+        this.setObjectKey(objectKey);
     }
 
-    public GetObjectRequest(UFileCredentials credentials, String bucketName, String objectKey, String objectRange)
+    public GetObjectRequest(String region, String bucketName, String objectKey, String objectRange)
     {
-        super(credentials, bucketName);
-        this.objectKey = objectKey;
-        this.objectRange = objectRange;
-    }
-
-    @Override
-    HttpUriRequest createHttpRequest()
-            throws UFileClientException
-    {
-        try {
-            String uri = "http://"
-                    + getBucketName() + getCredentials().getDownloadProxySuffix()
-                    + "/" + URLEncoder.encode(objectKey, "UTF-8");
-            URIBuilder builder = new URIBuilder(uri);
-            HttpGet request = new HttpGet(builder.build());
-            if (objectRange != null) {
-                request.addHeader("Range", objectRange);
-            }
-            return request;
-        }
-        catch (UnsupportedEncodingException e) {
-            throw new UFileClientException("URI Encode Error.", e);
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("URI Syntax Error.", e);
-        }
+        super(HttpType.GET, region, bucketName);
+        this.setObjectKey(objectKey);
+        this.addHeader("Range", objectRange);
     }
 
     @Override

@@ -14,44 +14,24 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.Header;
 
-import java.net.URISyntaxException;
+import java.io.InputStream;
 
 public class DeleteBucketRequest
         extends UBucketRequest
 {
-    private String bucketName;
-
     private String bucketId;
 
-    public DeleteBucketRequest(UFileCredentials credentials, String bucketName)
+    public DeleteBucketRequest(String region, String bucketName)
     {
-        super(credentials, "DeleteBucket");
-        this.bucketName = bucketName;
+        super(HttpType.DELETE, "DeleteBucket", region);
+        this.addParameter("BucketName", bucketName);
     }
 
     @Override
-    public HttpUriRequest createHttpRequest()
-            throws UFileClientException
-    {
-        try {
-            URIBuilder builder = new URIBuilder("https://" + UCLOUD_API_HOST);
-            builder.setParameter("BucketName", this.bucketName);
-            return new HttpGet(builder.build());
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("Create Http Request Error.", e);
-        }
-    }
-
-    @Override
-    public void onSuccess(JsonObject json)
+    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
             throws UFileServiceException
     {
         if (!json.has("BucketId")) {

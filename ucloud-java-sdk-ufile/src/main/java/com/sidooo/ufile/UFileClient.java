@@ -20,6 +20,7 @@ import com.sidooo.ufile.model.UBucketListing;
 import com.sidooo.ufile.model.UObject;
 import com.sidooo.ufile.model.UObjectListing;
 import com.sidooo.ufile.model.UObjectMetadata;
+import com.sidooo.ufile.request.BucketExecutor;
 import com.sidooo.ufile.request.CreateBucketRequest;
 import com.sidooo.ufile.request.DeleteBucketRequest;
 import com.sidooo.ufile.request.DeleteObjectRequest;
@@ -28,10 +29,9 @@ import com.sidooo.ufile.request.GetObjectMetaRequest;
 import com.sidooo.ufile.request.GetObjectRequest;
 import com.sidooo.ufile.request.ListBucketRequest;
 import com.sidooo.ufile.request.ListObjectRequest;
+import com.sidooo.ufile.request.ObjectExecutor;
 import com.sidooo.ufile.request.PutObjectRequest;
-import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedOutputStream;
@@ -47,41 +47,37 @@ import java.io.OutputStream;
 public class UFileClient
         implements UFile
 {
-    private CloseableHttpClient httpClient;
-    private UFileCredentials credentials;
+    private final UFileCredentials credentials;
+    private String region;
+
+    private BucketExecutor bucketExecutor;
+
+    private ObjectExecutor objectExecutor;
 
     public UFileClient(UFileCredentials credentials)
     {
         this.credentials = credentials;
-        this.httpClient = new DefaultHttpClient();
+        bucketExecutor = new BucketExecutor(credentials);
+        objectExecutor = new ObjectExecutor(credentials);
     }
 
     @Override
     public HttpClient getHttpClient()
     {
-        return this.httpClient;
+        return new DefaultHttpClient();
     }
 
-    public String getContentAsString(InputStream content)
+    @Override
+    public String getRegion()
     {
-        if (content != null) {
-            // Error Message
-            try {
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = content.read(buffer)) != -1) {
-                    result.write(buffer, 0, length);
-                }
-                return result.toString("UTF-8");
-            }
-            catch (IOException e) {
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
+        return region;
+    }
+
+    @Override
+    public UFile setRegion(String region)
+    {
+        this.region = region;
+        return this;
     }
 
     @Override
@@ -90,27 +86,22 @@ public class UFileClient
         return this.credentials;
     }
 
-    public void setCredentials(UFileCredentials credentials)
-    {
-        this.credentials = credentials;
-    }
-
-    private void printResponseHeaders(UFileResponse response)
-    {
-        System.out.println("status line: " + response.getStatusLine());
-        Header[] headers = response.getHeaders();
-        for (int i = 0; i < headers.length; i++) {
-            System.out.println("header " + headers[i].getName() + " : " + headers[i].getValue());
-        }
-        System.out.println("body length: " + response.getContentLength());
-    }
+//    private void printResponseHeaders(UFileResponse response)
+//    {
+//        System.out.println("status line: " + response.getStatusLine());
+//        Header[] headers = response.getHeaders();
+//        for (int i = 0; i < headers.length; i++) {
+//            System.out.println("header " + headers[i].getName() + " : " + headers[i].getValue());
+//        }
+//        System.out.println("body length: " + response.getContentLength());
+//    }
 
     @Override
     public UBucket createBucket(String bucketName, String type, String region)
             throws UFileClientException, UFileServiceException
     {
-        CreateBucketRequest request = new CreateBucketRequest(credentials, bucketName, type, region);
-        request.execute(httpClient);
+        CreateBucketRequest request = new CreateBucketRequest(region, bucketName, type);
+        bucketExecutor.execute(request);
         return request.getNewBucket();
     }
 
@@ -118,8 +109,8 @@ public class UFileClient
     public UBucket getBucket(String bucketName)
             throws UFileClientException, UFileServiceException
     {
-        GetBucketRequest request = new GetBucketRequest(credentials, bucketName);
-        request.execute(httpClient);
+        GetBucketRequest request = new GetBucketRequest(region, bucketName);
+        bucketExecutor.execute(request);
         return request.getBucket();
     }
 
@@ -127,8 +118,8 @@ public class UFileClient
     public UBucketListing listBuckets()
             throws UFileClientException, UFileServiceException
     {
-        ListBucketRequest request = new ListBucketRequest(credentials);
-        request.execute(httpClient);
+        ListBucketRequest request = new ListBucketRequest(region);
+        bucketExecutor.execute(request);
         return request.getBucketListing();
     }
 
@@ -136,8 +127,8 @@ public class UFileClient
     public String deleteBucket(String bucketName)
             throws UFileClientException, UFileServiceException
     {
-        DeleteBucketRequest request = new DeleteBucketRequest(credentials, bucketName);
-        request.execute(httpClient);
+        DeleteBucketRequest request = new DeleteBucketRequest(region, bucketName);
+        bucketExecutor.execute(request);
         return request.getDeletedBucketId();
     }
 
@@ -145,8 +136,8 @@ public class UFileClient
     public UObject getObject(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
-        GetObjectRequest request = new GetObjectRequest(this.credentials, bucketName, key);
-        request.execute(httpClient, key);
+        GetObjectRequest request = new GetObjectRequest(region, bucketName, key);
+        objectExecutor.execute(request, key);
         return request.getObject();
     }
 
@@ -218,8 +209,8 @@ public class UFileClient
     public UObjectMetadata getObjectMetadata(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
-        GetObjectMetaRequest request = new GetObjectMetaRequest(credentials, bucketName, key);
-        request.execute(httpClient, key);
+        GetObjectMetaRequest request = new GetObjectMetaRequest(region, bucketName, key);
+        objectExecutor.execute(request, key);
         return request.getObjectMetadata();
     }
 
@@ -234,8 +225,8 @@ public class UFileClient
         catch (FileNotFoundException e) {
             throw new UFileClientException(e);
         }
-        PutObjectRequest request = new PutObjectRequest(credentials, bucketName, key, objectStream, file.length());
-        request.execute(httpClient, key);
+        PutObjectRequest request = new PutObjectRequest(region, bucketName, key, objectStream, file.length());
+        objectExecutor.execute(request, key);
         return request.getNewObjectMetadata();
     }
 
@@ -243,8 +234,8 @@ public class UFileClient
     public UObjectListing listObjects(String bucketName, String prefix, Integer limit)
             throws UFileClientException, UFileServiceException
     {
-        ListObjectRequest request = new ListObjectRequest(credentials, bucketName, prefix, limit);
-        request.execute(httpClient, "");
+        ListObjectRequest request = new ListObjectRequest(region, bucketName, prefix, limit);
+        objectExecutor.execute(request, "");
         return request.getObjectListing();
     }
 
@@ -255,12 +246,12 @@ public class UFileClient
         if (perviousObjectListing.getNextMarker().equals("")) {
             return null;
         }
-        ListObjectRequest request = new ListObjectRequest(credentials,
+        ListObjectRequest request = new ListObjectRequest(region,
                 perviousObjectListing.getBucketName(),
                 perviousObjectListing.getPrefix(),
                 perviousObjectListing.getLimit(),
                 perviousObjectListing.getNextMarker());
-        request.execute(httpClient, "");
+        objectExecutor.execute(request, "");
         return request.getObjectListing();
     }
 
@@ -268,14 +259,15 @@ public class UFileClient
     public String deleteObject(String bucketName, String key)
             throws UFileClientException, UFileServiceException
     {
-        DeleteObjectRequest request = new DeleteObjectRequest(credentials, bucketName, key);
-        request.execute(httpClient, key);
+        DeleteObjectRequest request = new DeleteObjectRequest(region, bucketName, key);
+        objectExecutor.execute(request, key);
         return request.getDeleteObjectKey();
     }
 
     @Override
     public void shutdown()
     {
-        httpClient.getConnectionManager().shutdown();
+        objectExecutor.close();
+        bucketExecutor.close();
     }
 }

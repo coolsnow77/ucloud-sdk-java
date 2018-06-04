@@ -14,47 +14,26 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
-import com.sidooo.ufile.UFileCredentials;
-import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.Header;
 
-import java.net.URISyntaxException;
+import java.io.InputStream;
 
 public class GetBucketRequest
         extends UBucketRequest
 {
-    // 输入参数
-    private String bucketName;
-
     // 输出结果
     private UBucket bucket;
 
-    public GetBucketRequest(UFileCredentials credentials, String bucketName)
+    public GetBucketRequest(String region, String bucketName)
     {
-        super(credentials, "DescribeBucket");
-        this.bucketName = bucketName;
+        super(HttpType.GET, "DescribeBucket", region);
+        this.addParameter("BucketName", bucketName);
     }
 
     @Override
-    public HttpUriRequest createHttpRequest()
-            throws UFileClientException
-    {
-        try {
-            URIBuilder builder = new URIBuilder("https://" + UCLOUD_API_HOST);
-            builder.setParameter("BucketName", this.bucketName);
-            return new HttpGet(builder.build());
-        }
-        catch (URISyntaxException e) {
-            throw new UFileClientException("Create Http Request Error.", e);
-        }
-    }
-
-    @Override
-    public void onSuccess(JsonObject json)
+    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
             throws UFileServiceException
     {
         if (!json.has("BucketName")) {
