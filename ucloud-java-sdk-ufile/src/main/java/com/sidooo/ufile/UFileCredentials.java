@@ -69,13 +69,6 @@ public class UFileCredentials
         return this;
     }
 
-    public void makeAuth(String stringToSign, UFileRequest request)
-    {
-        String signature = new HmacSHA1().sign(privateKey, stringToSign);
-        String authorization = "UCloud" + " " + publicKey + ":" + signature;
-        request.setAuthorization(authorization);
-    }
-
     public void loadConfig(String configPath)
     {
         InputStream inputStream = null;
