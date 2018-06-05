@@ -1,4 +1,6 @@
 /*
+ * Copyright © 2018 UCloud (上海优刻得信息科技有限公司)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -29,33 +31,33 @@ public interface UFile
     /**
      * 获取UFile的身份认证信息
      *
-     * @return
+     * @return ucloud credentials
      */
     Credentials getCredentials();
 
     /**
      * 获取客户端默认的Region
      *
-     * @return
+     * @return ufile region
      */
     UFileRegion getDefaultRegion();
 
     /**
      * 设置操作的默认Region
      *
-     * @param region
-     * @return
+     * @param region  区域
+     * @return ufile client
      */
     UFile setDefaultRegion(UFileRegion region);
 
     /**
      * 创建UFile Bucket
      *
-     * @param bucketName
-     * @param type
-     * @return
-     * @throws UFileClientException
-     * @throws UFileServiceException
+     * @param bucketName  Bucket名称
+     * @param type  Bucket类型
+     * @return ufile bucket
+     * @throws UFileClientException   SDK客户端异常
+     * @throws UFileServiceException  UFile服务异常
      */
     UBucket createBucket(String bucketName, String type)
             throws UFileClientException, UFileServiceException;
@@ -63,9 +65,9 @@ public interface UFile
     /**
      * 获取指定Region下的所有Bucket
      *
-     * @return
-     * @throws UFileClientException
-     * @throws UFileServiceException
+     * @return listing of buckets
+     * @throws UFileClientException SDK客户端异常
+     * @throws UFileServiceException UFile服务异常
      */
     UBucketListing listBuckets()
             throws UFileClientException, UFileServiceException;
@@ -73,10 +75,10 @@ public interface UFile
     /**
      * 获取Bucket详细信息
      *
-     * @param bucketName
-     * @return
-     * @throws UFileClientException
-     * @throws UFileServiceException
+     * @param bucketName  Bucket名称
+     * @return ufile bucket
+     * @throws UFileClientException SDK客户端异常
+     * @throws UFileServiceException UFile服务异常
      */
     UBucket getBucket(String bucketName)
             throws UFileClientException, UFileServiceException;
@@ -85,7 +87,7 @@ public interface UFile
      * 删除指定的Bucket
      *
      * @param bucketName
-     * @return
+     * @return deleted bucket name
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -97,7 +99,7 @@ public interface UFile
      *
      * @param bucketName
      * @param key
-     * @return
+     * @return ufile object
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -111,7 +113,7 @@ public interface UFile
      * @param key
      * @param offset
      * @param length
-     * @return
+     * @return ufile object
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -124,7 +126,7 @@ public interface UFile
      * @param bucketName
      * @param key
      * @param destinationFile
-     * @return
+     * @return ufile object meatadata
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -136,7 +138,7 @@ public interface UFile
      *
      * @param bucketName
      * @param key
-     * @return
+     * @return object content
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -152,7 +154,7 @@ public interface UFile
      * @param bucketName
      * @param key
      * @param file
-     * @return
+     * @return metadata of ufile object
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -165,7 +167,7 @@ public interface UFile
      * @param bucketName
      * @param prefix
      * @param limit
-     * @return
+     * @return listing of ufile objects
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -176,7 +178,7 @@ public interface UFile
      * 获取下一页的对象列表
      *
      * @param perviousObjectListing
-     * @return
+     * @return listing of ufile objects
      * @throws UFileClientException
      * @throws UFileServiceException
      */
@@ -188,7 +190,7 @@ public interface UFile
      *
      * @param bucketName
      * @param key
-     * @return
+     * @return deleted object key
      * @throws UFileClientException
      * @throws UFileServiceException
      */

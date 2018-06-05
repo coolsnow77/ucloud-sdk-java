@@ -1,4 +1,6 @@
 /*
+ * Copyright © 2018 UCloud (上海优刻得信息科技有限公司)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -55,7 +57,11 @@ public enum UCloudRegion
 
     public static UCloudRegion getEnum(String value)
     {
-        for (UCloudRegion v : values()) { if (v.getValue().equalsIgnoreCase(value)) { return v; } }
+        for (UCloudRegion v : values()) {
+            if (v.getValue().equalsIgnoreCase(value)) {
+                return v;
+            }
+        }
         throw new IllegalArgumentException();
     }
 }
