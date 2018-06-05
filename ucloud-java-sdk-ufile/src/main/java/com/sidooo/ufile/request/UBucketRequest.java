@@ -14,6 +14,7 @@
 package com.sidooo.ufile.request;
 
 import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.exception.UFileServiceException;
 
 public abstract class UBucketRequest
         extends URequest
@@ -28,4 +29,7 @@ public abstract class UBucketRequest
     {
         return getParameter("Action");
     }
+
+    public abstract Object execute(BucketExecutor executor)
+            throws UFileServiceException;
 }

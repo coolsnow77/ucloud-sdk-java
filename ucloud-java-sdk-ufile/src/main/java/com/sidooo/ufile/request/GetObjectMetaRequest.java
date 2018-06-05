@@ -13,19 +13,14 @@
  */
 package com.sidooo.ufile.request;
 
-import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
 
-import java.io.InputStream;
-
 public class GetObjectMetaRequest
         extends UObjectRequest
 {
-    private UObjectMetadata objectMetadata;
-
     public GetObjectMetaRequest(Region region, String bucketName, String objectKey)
     {
         super(HttpType.HEAD, region, bucketName);
@@ -33,14 +28,11 @@ public class GetObjectMetaRequest
     }
 
     @Override
-    public void onSuccess(JsonObject response, Header[] headers, InputStream content)
+    public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
-        this.objectMetadata = new UObjectMetadata(headers);
-    }
-
-    public UObjectMetadata getObjectMetadata()
-    {
-        return this.objectMetadata;
+        UResponse response = executor.execute(this, getObjectKey());
+        Header[] headers = response.getHeaders();
+        return new UObjectMetadata(headers);
     }
 }

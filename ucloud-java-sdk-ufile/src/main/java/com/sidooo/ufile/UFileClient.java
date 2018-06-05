@@ -106,9 +106,9 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(type, "bucketType is null");
+
         CreateBucketRequest request = new CreateBucketRequest(region, bucketName, type);
-        bucketExecutor.execute(request);
-        return request.getNewBucket();
+        return (UBucket) request.execute(bucketExecutor);
     }
 
     @Override
@@ -116,9 +116,9 @@ public class UFileClient
             throws UFileClientException, UFileServiceException
     {
         requireNonNull(bucketName, "bucketName is null");
+
         GetBucketRequest request = new GetBucketRequest(region, bucketName);
-        bucketExecutor.execute(request);
-        return request.getBucket();
+        return (UBucket) request.execute(bucketExecutor);
     }
 
     @Override
@@ -126,8 +126,7 @@ public class UFileClient
             throws UFileClientException, UFileServiceException
     {
         ListBucketRequest request = new ListBucketRequest(region);
-        bucketExecutor.execute(request);
-        return request.getBucketListing();
+        return (UBucketListing) request.execute(bucketExecutor);
     }
 
     @Override
@@ -135,9 +134,9 @@ public class UFileClient
             throws UFileClientException, UFileServiceException
     {
         requireNonNull(bucketName, "bucketName is null");
+
         DeleteBucketRequest request = new DeleteBucketRequest(region, bucketName);
-        bucketExecutor.execute(request);
-        return request.getDeletedBucketId();
+        return (String) request.execute(bucketExecutor);
     }
 
     @Override
@@ -146,9 +145,9 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "key is null");
+
         GetObjectRequest request = new GetObjectRequest(region, bucketName, key);
-        objectExecutor.execute(request, key);
-        return request.getObject();
+        return (UObject) request.execute(objectExecutor);
     }
 
     @Override
@@ -157,10 +156,10 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "objectKey is null");
+
         String range = String.format("bytes=%d-%d", offset, offset + length - 1);
         GetObjectRequest request = new GetObjectRequest(region, bucketName, key, range);
-        objectExecutor.execute(request, key);
-        return request.getObject();
+        return (UObject) request.execute(objectExecutor);
     }
 
     @Override
@@ -241,8 +240,7 @@ public class UFileClient
         requireNonNull(key, "objectKey is null");
 
         GetObjectMetaRequest request = new GetObjectMetaRequest(region, bucketName, key);
-        objectExecutor.execute(request, key);
-        return request.getObjectMetadata();
+        return (UObjectMetadata) request.execute(objectExecutor);
     }
 
     @Override
@@ -261,8 +259,7 @@ public class UFileClient
             throw new UFileClientException(e);
         }
         PutObjectRequest request = new PutObjectRequest(region, bucketName, key, objectStream, file.length());
-        objectExecutor.execute(request, key);
-        return request.getNewObjectMetadata();
+        return (UObjectMetadata) request.execute(objectExecutor);
     }
 
     @Override
@@ -272,8 +269,7 @@ public class UFileClient
         requireNonNull(bucketName, "bucketName is null");
 
         ListObjectRequest request = new ListObjectRequest(region, bucketName, prefix, limit);
-        objectExecutor.execute(request, "");
-        return request.getObjectListing();
+        return (UObjectListing) request.execute(objectExecutor);
     }
 
     @Override
@@ -288,8 +284,7 @@ public class UFileClient
                 perviousObjectListing.getPrefix(),
                 perviousObjectListing.getLimit(),
                 perviousObjectListing.getNextMarker());
-        objectExecutor.execute(request, "");
-        return request.getObjectListing();
+        return (UObjectListing) request.execute(objectExecutor);
     }
 
     @Override
@@ -300,8 +295,7 @@ public class UFileClient
         requireNonNull(key, "objectKey is null");
 
         DeleteObjectRequest request = new DeleteObjectRequest(region, bucketName, key);
-        objectExecutor.execute(request, key);
-        return request.getDeleteObjectKey();
+        return (String) request.execute(objectExecutor);
     }
 
     @Override

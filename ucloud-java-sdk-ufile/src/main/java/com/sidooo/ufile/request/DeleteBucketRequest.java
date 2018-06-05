@@ -16,15 +16,10 @@ package com.sidooo.ufile.request;
 import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
-import org.apache.http.Header;
 
-import java.io.InputStream;
-
-public class DeleteBucketRequest
+public final class DeleteBucketRequest
         extends UBucketRequest
 {
-    private String bucketId;
-
     public DeleteBucketRequest(Region region, String bucketName)
     {
         super(HttpType.DELETE, "DeleteBucket", region);
@@ -32,17 +27,14 @@ public class DeleteBucketRequest
     }
 
     @Override
-    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
+    public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        UResponse response = executor.execute(this);
+        JsonObject json = response.getResponse();
         if (!json.has("BucketId")) {
             throw new UFileServiceException("Bucket Id missing.");
         }
-        this.bucketId = json.get("BucketId").getAsString();
-    }
-
-    public String getDeletedBucketId()
-    {
-        return this.bucketId;
+        return json.get("BucketId").getAsString();
     }
 }

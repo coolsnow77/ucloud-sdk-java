@@ -13,16 +13,12 @@
  */
 package com.sidooo.ufile.request;
 
-import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
-import com.sidooo.ufile.exception.UFileServiceException;
-import org.apache.http.Header;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class URequest
+public class URequest
 {
     private final Region region;
 
@@ -88,10 +84,4 @@ public abstract class URequest
     {
         this.headers = headers;
     }
-
-    /*
-     * API请求成功后的处理函数
-     */
-    public abstract void onSuccess(JsonObject response, Header[] headers, InputStream content)
-            throws UFileServiceException;
 }

@@ -17,16 +17,10 @@ import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
-import org.apache.http.Header;
-
-import java.io.InputStream;
 
 public class CreateBucketRequest
         extends UBucketRequest
 {
-    // 输出结果
-    private UBucket bucket;
-
     public CreateBucketRequest(Region region, String bucketName)
     {
         this(region, bucketName, "public");
@@ -41,9 +35,11 @@ public class CreateBucketRequest
     }
 
     @Override
-    public void onSuccess(JsonObject result, Header[] headers, InputStream content)
+    public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        UResponse response = executor.execute(this);
+        JsonObject result = response.getResponse();
         if (!result.has("BucketName")) {
             throw new UFileServiceException("Bucket Name missing.");
         }
@@ -54,11 +50,6 @@ public class CreateBucketRequest
         }
         String bucketId = result.get("BucketId").getAsString();
 
-        this.bucket = new UBucket(bucketId, bucketName);
-    }
-
-    public UBucket getNewBucket()
-    {
-        return this.bucket;
+        return new UBucket(bucketId, bucketName);
     }
 }

@@ -82,7 +82,7 @@ public class ObjectExecutor
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    public void execute(UObjectRequest request, String objectKey)
+    public UResponse execute(UObjectRequest request, String objectKey)
             throws UFileClientException
     {
         // 生成Http请求
@@ -152,22 +152,19 @@ public class ObjectExecutor
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 HttpEntity resEntity = httpResponse.getEntity();
                 if (resEntity == null) {
-                    request.onSuccess(null, httpResponse.getAllHeaders(), null);
+                    return new UResponse(httpResponse.getAllHeaders());
                 }
                 else {
                     if (resEntity.getContentLength() <= 0) {
-                        request.onSuccess(null, httpResponse.getAllHeaders(), null);
-                        return;
+                        return new UResponse(httpResponse.getAllHeaders());
                     }
                     String contentType = getContentType(httpResponse.getAllHeaders());
                     if (contentType.equals("text/plain") || contentType.equals("application/json")) {
                         Reader reader = new InputStreamReader(resEntity.getContent());
                         JsonObject json = (new JsonParser()).parse(reader).getAsJsonObject();
                         if (!json.has("RetCode")) {
-//                            throw new UFileServiceException("RetCode missing.");
                             // List Objects请求时没有RetCode
-                            request.onSuccess(json, httpResponse.getAllHeaders(), null);
-                            return;
+                            return new UResponse(json, httpResponse.getAllHeaders());
                         }
                         Long returnCode = json.get("RetCode").getAsLong();
                         if (returnCode != 0) {
@@ -182,25 +179,27 @@ public class ObjectExecutor
                             if (json.has("ErrMsg")) {
                                 json.remove("ErrMsg");
                             }
-                            request.onSuccess(json, httpResponse.getAllHeaders(), null);
+                            return new UResponse(json, httpResponse.getAllHeaders());
                         }
                     }
                     else {
                         // 二进制的数据
-                        request.onSuccess(null, httpResponse.getAllHeaders(), cloneContent(resEntity.getContent()));
+                        return new UResponse(httpResponse.getAllHeaders(), cloneContent(resEntity.getContent()));
                     }
                 }
             }
             else if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                request.onSuccess(null, httpResponse.getAllHeaders(), null);
+                return new UResponse(httpResponse.getAllHeaders());
             }
             else if (httpResponse.getStatusLine().getStatusCode() == 206) {
                 // 请求对象部分数据
                 HttpEntity resEntity = httpResponse.getEntity();
                 if (resEntity == null) {
-                    request.onSuccess(null, httpResponse.getAllHeaders(), null);
+                    return new UResponse(httpResponse.getAllHeaders());
                 }
-                request.onSuccess(null, httpResponse.getAllHeaders(), cloneContent(resEntity.getContent()));
+                else {
+                    return new UResponse(httpResponse.getAllHeaders(), cloneContent(resEntity.getContent()));
+                }
             }
             else {
                 // 服务器返回错误

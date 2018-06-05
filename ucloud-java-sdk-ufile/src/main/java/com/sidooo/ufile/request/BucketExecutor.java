@@ -42,7 +42,7 @@ public class BucketExecutor
         super(credentials);
     }
 
-    public void execute(UBucketRequest request)
+    public UResponse execute(UBucketRequest request)
             throws UFileClientException
     {
         // 计算API请求的签名
@@ -104,7 +104,7 @@ public class BucketExecutor
                     throw new UFileServiceException("Action mismatch: " + action);
                 }
                 json.remove("Action");
-                request.onSuccess(json, null, null);
+                return new UResponse(json);
             }
             else {
                 HttpEntity resEntity = httpResponse.getEntity();

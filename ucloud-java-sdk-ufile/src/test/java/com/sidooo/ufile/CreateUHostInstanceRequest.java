@@ -13,14 +13,11 @@
  */
 package com.sidooo.ufile;
 
-import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
+import com.sidooo.ufile.request.BucketExecutor;
 import com.sidooo.ufile.request.HttpType;
 import com.sidooo.ufile.request.UBucketRequest;
-import org.apache.http.Header;
-
-import java.io.InputStream;
 
 public class CreateUHostInstanceRequest
         extends UBucketRequest
@@ -42,8 +39,9 @@ public class CreateUHostInstanceRequest
     }
 
     @Override
-    public void onSuccess(JsonObject result, Header[] headers, InputStream content)
+    public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        return null;
     }
 }

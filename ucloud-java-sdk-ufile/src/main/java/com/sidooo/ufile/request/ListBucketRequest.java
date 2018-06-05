@@ -19,9 +19,6 @@ import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
-import org.apache.http.Header;
-
-import java.io.InputStream;
 
 public class ListBucketRequest
         extends UBucketRequest
@@ -29,9 +26,6 @@ public class ListBucketRequest
     // 输入参数
     private int offset;
     private int limit = 20;
-
-    // 输出结果
-    private UBucketListing buckets;
 
     public ListBucketRequest(Region region)
     {
@@ -46,14 +40,16 @@ public class ListBucketRequest
     }
 
     @Override
-    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
+    public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        UResponse response = executor.execute(this);
+        JsonObject json = response.getResponse();
         if (!json.has("DataSet")) {
             throw new UFileServiceException("DataSet missing.");
         }
         JsonArray dataSet = json.getAsJsonArray("DataSet");
-        buckets = new UBucketListing();
+        UBucketListing buckets = new UBucketListing();
         for (int i = 0; i < dataSet.size(); i++) {
             UBucket bucket = new UBucket();
             String bucketId = dataSet.get(i).getAsJsonObject().get("BucketId").getAsString();
@@ -62,10 +58,6 @@ public class ListBucketRequest
             bucket.setName(bucketName);
             buckets.putBucket(bucket);
         }
-    }
-
-    public UBucketListing getBucketListing()
-    {
-        return this.buckets;
+        return buckets;
     }
 }

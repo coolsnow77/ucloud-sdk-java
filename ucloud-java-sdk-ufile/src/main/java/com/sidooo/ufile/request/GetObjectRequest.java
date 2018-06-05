@@ -13,7 +13,6 @@
  */
 package com.sidooo.ufile.request;
 
-import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.UFileHeaders;
 import com.sidooo.ufile.exception.UFileServiceException;
@@ -50,8 +49,6 @@ import java.util.regex.Pattern;
 public class GetObjectRequest
         extends UObjectRequest
 {
-    private UObject object;
-
     private static final String CONTENT_RANGE_REGEX = "^bytes ([0-9]+)-([0-9]+)/[0-9]+";
 
     public GetObjectRequest(Region region, String bucketName, String objectKey)
@@ -78,9 +75,13 @@ public class GetObjectRequest
     }
 
     @Override
-    public void onSuccess(JsonObject response, Header[] headers, InputStream content)
+    public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        UResponse response = executor.execute(this, this.getObjectKey());
+        Header[] headers = response.getHeaders();
+        InputStream content = response.getContent();
+
         // 解析Content-Range
         // 格式： bytes 0-31/24135125
         Long rangeOffset = 0L;
@@ -98,11 +99,6 @@ public class GetObjectRequest
         object.setObjectKey(this.getObjectKey());
         object.setObjectContent(new UObjectInputStream(content, rangeOffset));
         object.setObjectMetadata(new UObjectMetadata(headers));
-        this.object = object;
-    }
-
-    public UObject getObject()
-    {
-        return this.object;
+        return object;
     }
 }

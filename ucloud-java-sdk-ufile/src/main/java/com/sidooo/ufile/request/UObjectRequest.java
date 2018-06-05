@@ -14,6 +14,7 @@
 package com.sidooo.ufile.request;
 
 import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.exception.UFileServiceException;
 
 import java.io.InputStream;
 
@@ -147,4 +148,7 @@ public abstract class UObjectRequest
     {
         this.objectStreamLength = length;
     }
+
+    public abstract Object execute(ObjectExecutor executor)
+            throws UFileServiceException;
 }

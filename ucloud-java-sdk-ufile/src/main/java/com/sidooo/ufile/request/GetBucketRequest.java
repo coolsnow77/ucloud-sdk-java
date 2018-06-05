@@ -18,16 +18,10 @@ import com.google.gson.JsonObject;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
-import org.apache.http.Header;
-
-import java.io.InputStream;
 
 public class GetBucketRequest
         extends UBucketRequest
 {
-    // 输出结果
-    private UBucket bucket;
-
     public GetBucketRequest(Region region, String bucketName)
     {
         super(HttpType.GET, "DescribeBucket", region);
@@ -35,9 +29,10 @@ public class GetBucketRequest
     }
 
     @Override
-    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
-            throws UFileServiceException
+    public Object execute(BucketExecutor executor) throws UFileServiceException
     {
+        UResponse response = executor.execute(this);
+        JsonObject json = response.getResponse();
         if (!json.has("DataSet")) {
             throw new UFileServiceException("DataSet missing.");
         }
@@ -56,11 +51,6 @@ public class GetBucketRequest
         }
         String bucketId = jsonBucket.get("BucketId").getAsString();
 
-        this.bucket = new UBucket(bucketId, bucketName);
-    }
-
-    public UBucket getBucket()
-    {
-        return this.bucket;
+        return new UBucket(bucketId, bucketName);
     }
 }

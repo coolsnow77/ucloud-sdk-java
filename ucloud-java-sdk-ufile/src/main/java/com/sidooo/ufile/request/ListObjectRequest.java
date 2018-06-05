@@ -20,9 +20,7 @@ import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectListing;
 import com.sidooo.ufile.model.UObjectSummary;
-import org.apache.http.Header;
 
-import java.io.InputStream;
 import java.util.Date;
 
 /*
@@ -53,8 +51,6 @@ public class ListObjectRequest
     private String marker;
     private int limit = 20;
 
-    private UObjectListing objectListing;
-
     public ListObjectRequest(Region region, String bucketName,
             String prefix)
     {
@@ -80,14 +76,16 @@ public class ListObjectRequest
     }
 
     @Override
-    public void onSuccess(JsonObject json, Header[] headers, InputStream content)
+    public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
-        objectListing = new UObjectListing();
+        UResponse response = executor.execute(this, "");
+        JsonObject json = response.getResponse();
 
         if (!json.get("BucketName").getAsString().equals(getBucketName())) {
             throw new UFileServiceException("Bucket Name mismatch.");
         }
+        UObjectListing objectListing = new UObjectListing();
         objectListing.setBucketName(getBucketName());
         String bucketId = json.get("BucketId").getAsString();
         if (bucketId == null) {
@@ -121,10 +119,7 @@ public class ListObjectRequest
             objectSummary.setLastModified(new Date(modifyTimestamp));
             objectListing.putObjectSummary(objectSummary);
         }
-    }
 
-    public UObjectListing getObjectListing()
-    {
-        return this.objectListing;
+        return objectListing;
     }
 }
