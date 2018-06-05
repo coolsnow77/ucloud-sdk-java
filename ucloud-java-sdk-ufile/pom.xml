@@ -7,12 +7,12 @@
     <parent>
         <groupId>com.sidooo</groupId>
         <artifactId>ucloud-java-sdk-root</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </parent>
     
     <groupId>com.sidooo</groupId>
     <artifactId>ucloud-java-sdk-ufile</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <licenses>
         <license>
@@ -73,12 +73,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.293</version>
             <scope>test</scope>
         </dependency>
 
