@@ -13,7 +13,7 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ufile.UFileCredentials;
+import com.sidooo.ucloud.Credentials;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -23,17 +23,17 @@ import java.io.InputStream;
 
 public class AbstractExcector
 {
-    private final UFileCredentials credentials;
+    private final Credentials credentials;
 
     protected final CloseableHttpClient httpClient;
 
-    public AbstractExcector(UFileCredentials credentials)
+    public AbstractExcector(Credentials credentials)
     {
         this.credentials = credentials;
         this.httpClient = new DefaultHttpClient();
     }
 
-    public UFileCredentials getCredentials()
+    public Credentials getCredentials()
     {
         return this.credentials;
     }

@@ -11,14 +11,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sidooo.ufile.request;
+package com.sidooo.ufile;
 
-import com.sidooo.ufile.HmacSHA1;
-import com.sidooo.ufile.UFileCredentials;
+import com.sidooo.ucloud.Credentials;
+import com.sidooo.ufile.request.UObjectRequest;
 
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * UFile API操作有两种签名
+ * 1. Bucket操作走的是UCloud统一的API， 使用UCloud API签名算法
+ * 2. Object操作走的是UFile产品的API， 使用UFile API签名个算法
+ * 该类是对Object操作的API进行签名
+ */
 public class UFileSignatureBuilder
 {
     private static final String CANONICAL_PREFIX = "X-UCloud";
@@ -49,7 +55,7 @@ public class UFileSignatureBuilder
         }
     }
 
-    public static String getSignature(UObjectRequest request, String objectkey, UFileCredentials credentials)
+    public static String getSignature(UObjectRequest request, String objectkey, Credentials credentials)
     {
         String contentMD5 = request.getContentMD5();
         String contentType = request.getContentType();

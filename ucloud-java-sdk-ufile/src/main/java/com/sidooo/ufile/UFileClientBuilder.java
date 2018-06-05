@@ -13,9 +13,13 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Credentials;
 import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.request.BucketExecutor;
+import com.sidooo.ufile.request.ObjectExecutor;
 
 import static com.sidooo.ucloud.Region.CN_BJ2;
+import static java.util.Objects.requireNonNull;
 
 public class UFileClientBuilder
 {
@@ -24,13 +28,20 @@ public class UFileClientBuilder
     // 从系统配置文件中加载
     public static UFile defaultClient(String configFile)
     {
-        UFileCredentials credentials = new UFileCredentials();
+        requireNonNull(configFile, "config file is null.");
+
+        Credentials credentials = new Credentials();
         credentials.loadConfig(configFile);
         return standard(credentials, CN_BJ2);
     }
 
-    public static UFile standard(UFileCredentials credentials, Region defaultRegion)
+    public static UFile standard(Credentials credentials, Region defaultRegion)
     {
-        return new UFileClient(credentials).setDefaultRegion(defaultRegion);
+        requireNonNull(credentials, "credentials is null.");
+        requireNonNull(defaultRegion, "default region is null.");
+
+        BucketExecutor bucketExecutor = new BucketExecutor(credentials);
+        ObjectExecutor objectExecutor = new ObjectExecutor(credentials);
+        return new UFileClient(credentials, bucketExecutor, objectExecutor).setDefaultRegion(defaultRegion);
     }
 }

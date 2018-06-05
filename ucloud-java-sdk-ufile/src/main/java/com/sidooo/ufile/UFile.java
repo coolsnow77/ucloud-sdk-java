@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Credentials;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
@@ -31,7 +32,7 @@ public interface UFile
      *
      * @return
      */
-    UFileCredentials getCredentials();
+    Credentials getCredentials();
 
     /**
      * 获取客户端默认的Region
@@ -40,6 +41,12 @@ public interface UFile
      */
     Region getDefaultRegion();
 
+    /**
+     * 设置操作的默认Region
+     *
+     * @param region
+     * @return
+     */
     UFile setDefaultRegion(Region region);
 
     /**

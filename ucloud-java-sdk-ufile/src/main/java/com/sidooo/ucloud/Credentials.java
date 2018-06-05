@@ -11,14 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sidooo.ufile;
+package com.sidooo.ucloud;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class UFileCredentials
+public class Credentials
 {
     private String publicKey;
     private String privateKey;
@@ -30,7 +30,7 @@ public class UFileCredentials
         return this.publicKey;
     }
 
-    public UFileCredentials setPublicKey(String publicKey)
+    public Credentials setPublicKey(String publicKey)
     {
         this.publicKey = publicKey;
         return this;
@@ -41,7 +41,7 @@ public class UFileCredentials
         return this.privateKey;
     }
 
-    public UFileCredentials setPrivateKey(String privateKey)
+    public Credentials setPrivateKey(String privateKey)
     {
         this.privateKey = privateKey;
         return this;
@@ -52,7 +52,7 @@ public class UFileCredentials
         return this.proxySuffix;
     }
 
-    public UFileCredentials setProxySuffix(String proxySuffix)
+    public Credentials setProxySuffix(String proxySuffix)
     {
         this.proxySuffix = proxySuffix;
         return this;
@@ -63,7 +63,7 @@ public class UFileCredentials
         return this.downloadProxySuffix;
     }
 
-    public UFileCredentials setDownloadProxySuffix(String downloadProxySuffix)
+    public Credentials setDownloadProxySuffix(String downloadProxySuffix)
     {
         this.downloadProxySuffix = downloadProxySuffix;
         return this;

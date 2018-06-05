@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Credentials;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
@@ -48,19 +49,22 @@ import static java.util.Objects.requireNonNull;
 public class UFileClient
         implements UFile
 {
-    private final UFileCredentials credentials;
+    private final Credentials credentials;
 
     private Region defaultRegion;
 
-    private BucketExecutor bucketExecutor;
+    private final BucketExecutor bucketExecutor;
 
-    private ObjectExecutor objectExecutor;
+    private final ObjectExecutor objectExecutor;
 
-    public UFileClient(UFileCredentials credentials)
+    public UFileClient(
+            Credentials credentials,
+            BucketExecutor bucketExecutor,
+            ObjectExecutor objectExecutor)
     {
         this.credentials = credentials;
-        bucketExecutor = new BucketExecutor(credentials);
-        objectExecutor = new ObjectExecutor(credentials);
+        this.bucketExecutor = bucketExecutor;
+        this.objectExecutor = objectExecutor;
     }
 
     @Override
@@ -77,7 +81,7 @@ public class UFileClient
     }
 
     @Override
-    public UFileCredentials getCredentials()
+    public Credentials getCredentials()
     {
         return this.credentials;
     }

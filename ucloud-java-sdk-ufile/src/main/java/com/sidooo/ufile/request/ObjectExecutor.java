@@ -15,8 +15,9 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sidooo.ufile.UFileCredentials;
+import com.sidooo.ucloud.Credentials;
 import com.sidooo.ufile.UFileHeaders;
+import com.sidooo.ufile.UFileSignatureBuilder;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import org.apache.http.Header;
@@ -47,7 +48,7 @@ public class ObjectExecutor
 {
     public static final String AUTHORIZATION = "Authorization";
 
-    public ObjectExecutor(UFileCredentials credentials)
+    public ObjectExecutor(Credentials credentials)
     {
         super(credentials);
     }
