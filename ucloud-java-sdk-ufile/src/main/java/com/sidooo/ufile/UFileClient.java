@@ -32,8 +32,6 @@ import com.sidooo.ufile.request.ListBucketRequest;
 import com.sidooo.ufile.request.ListObjectRequest;
 import com.sidooo.ufile.request.ObjectExecutor;
 import com.sidooo.ufile.request.PutObjectRequest;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -52,7 +50,7 @@ public class UFileClient
 {
     private final UFileCredentials credentials;
 
-    private Region region;
+    private Region defaultRegion;
 
     private BucketExecutor bucketExecutor;
 
@@ -66,21 +64,15 @@ public class UFileClient
     }
 
     @Override
-    public HttpClient getHttpClient()
+    public Region getDefaultRegion()
     {
-        return new DefaultHttpClient();
+        return defaultRegion;
     }
 
     @Override
-    public Region getRegion()
+    public UFile setDefaultRegion(Region defaultRegion)
     {
-        return region;
-    }
-
-    @Override
-    public UFile setRegion(Region region)
-    {
-        this.region = region;
+        this.defaultRegion = defaultRegion;
         return this;
     }
 
@@ -107,7 +99,7 @@ public class UFileClient
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(type, "bucketType is null");
 
-        CreateBucketRequest request = new CreateBucketRequest(region, bucketName, type);
+        CreateBucketRequest request = new CreateBucketRequest(defaultRegion, bucketName, type);
         return (UBucket) request.execute(bucketExecutor);
     }
 
@@ -117,7 +109,7 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
 
-        GetBucketRequest request = new GetBucketRequest(region, bucketName);
+        GetBucketRequest request = new GetBucketRequest(defaultRegion, bucketName);
         return (UBucket) request.execute(bucketExecutor);
     }
 
@@ -125,7 +117,7 @@ public class UFileClient
     public UBucketListing listBuckets()
             throws UFileClientException, UFileServiceException
     {
-        ListBucketRequest request = new ListBucketRequest(region);
+        ListBucketRequest request = new ListBucketRequest(defaultRegion);
         return (UBucketListing) request.execute(bucketExecutor);
     }
 
@@ -135,7 +127,7 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
 
-        DeleteBucketRequest request = new DeleteBucketRequest(region, bucketName);
+        DeleteBucketRequest request = new DeleteBucketRequest(defaultRegion, bucketName);
         return (String) request.execute(bucketExecutor);
     }
 
@@ -146,7 +138,7 @@ public class UFileClient
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "key is null");
 
-        GetObjectRequest request = new GetObjectRequest(region, bucketName, key);
+        GetObjectRequest request = new GetObjectRequest(defaultRegion, bucketName, key);
         return (UObject) request.execute(objectExecutor);
     }
 
@@ -158,7 +150,7 @@ public class UFileClient
         requireNonNull(key, "objectKey is null");
 
         String range = String.format("bytes=%d-%d", offset, offset + length - 1);
-        GetObjectRequest request = new GetObjectRequest(region, bucketName, key, range);
+        GetObjectRequest request = new GetObjectRequest(defaultRegion, bucketName, key, range);
         return (UObject) request.execute(objectExecutor);
     }
 
@@ -239,7 +231,7 @@ public class UFileClient
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "objectKey is null");
 
-        GetObjectMetaRequest request = new GetObjectMetaRequest(region, bucketName, key);
+        GetObjectMetaRequest request = new GetObjectMetaRequest(defaultRegion, bucketName, key);
         return (UObjectMetadata) request.execute(objectExecutor);
     }
 
@@ -258,7 +250,7 @@ public class UFileClient
         catch (FileNotFoundException e) {
             throw new UFileClientException(e);
         }
-        PutObjectRequest request = new PutObjectRequest(region, bucketName, key, objectStream, file.length());
+        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, file.length());
         return (UObjectMetadata) request.execute(objectExecutor);
     }
 
@@ -268,7 +260,7 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
 
-        ListObjectRequest request = new ListObjectRequest(region, bucketName, prefix, limit);
+        ListObjectRequest request = new ListObjectRequest(defaultRegion, bucketName, prefix, limit);
         return (UObjectListing) request.execute(objectExecutor);
     }
 
@@ -279,7 +271,7 @@ public class UFileClient
         if (perviousObjectListing.getNextMarker().equals("")) {
             return null;
         }
-        ListObjectRequest request = new ListObjectRequest(region,
+        ListObjectRequest request = new ListObjectRequest(defaultRegion,
                 perviousObjectListing.getBucketName(),
                 perviousObjectListing.getPrefix(),
                 perviousObjectListing.getLimit(),
@@ -294,7 +286,7 @@ public class UFileClient
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "objectKey is null");
 
-        DeleteObjectRequest request = new DeleteObjectRequest(region, bucketName, key);
+        DeleteObjectRequest request = new DeleteObjectRequest(defaultRegion, bucketName, key);
         return (String) request.execute(objectExecutor);
     }
 

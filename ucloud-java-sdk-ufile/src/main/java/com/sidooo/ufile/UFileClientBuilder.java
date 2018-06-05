@@ -22,14 +22,15 @@ public class UFileClientBuilder
     private UFileClientBuilder() {}
 
     // 从系统配置文件中加载
-    public static UFile defaultClient()
+    public static UFile defaultClient(String configFile)
     {
         UFileCredentials credentials = new UFileCredentials();
+        credentials.loadConfig(configFile);
         return standard(credentials, CN_BJ2);
     }
 
     public static UFile standard(UFileCredentials credentials, Region defaultRegion)
     {
-        return new UFileClient(credentials).setRegion(defaultRegion);
+        return new UFileClient(credentials).setDefaultRegion(defaultRegion);
     }
 }
