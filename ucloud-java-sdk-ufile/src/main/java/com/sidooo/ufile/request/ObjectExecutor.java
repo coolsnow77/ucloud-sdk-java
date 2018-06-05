@@ -92,12 +92,12 @@ public final class ObjectExecutor
             String uri = null;
             if (request.getObjectKey() != null) {
                 uri = "http://"
-                        + request.getBucketName() + getCredentials().getProxySuffix()
+                        + request.getBucketName() + "." + request.getRegion().getValue() + ".ufileos.com"
                         + "/" + URLEncoder.encode(request.getObjectKey(), "UTF-8");
             }
             else {
                 uri = "http://"
-                        + request.getBucketName() + getCredentials().getProxySuffix()
+                        + request.getBucketName() + "." + request.getRegion().getValue() + ".ufileos.com"
                         + "/?list";
             }
             URIBuilder builder = new URIBuilder(uri);

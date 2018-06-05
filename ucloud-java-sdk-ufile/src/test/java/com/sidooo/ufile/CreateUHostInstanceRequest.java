@@ -13,7 +13,6 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.request.BucketExecutor;
 import com.sidooo.ufile.request.HttpType;
@@ -24,7 +23,7 @@ public class CreateUHostInstanceRequest
 {
     public CreateUHostInstanceRequest()
     {
-        super(HttpType.GET, "CreateUHostInstance", Region.CN_BJ2);
+        super(HttpType.GET, "CreateUHostInstance", UFileRegion.CN_BJ);
         addParameter("CPU", "2");
         addParameter("Name", "Host01");
         addParameter("LoginMode", "Password");

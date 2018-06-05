@@ -13,7 +13,7 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
@@ -43,7 +43,7 @@ import java.io.InputStream;
 public final class PutObjectRequest
         extends UObjectRequest
 {
-    public PutObjectRequest(Region region, String bucketName,
+    public PutObjectRequest(UFileRegion region, String bucketName,
             String objectKey, InputStream objectStream, Long objectLength)
     {
         super(HttpType.PUT, region, bucketName);
@@ -52,7 +52,7 @@ public final class PutObjectRequest
         this.setObjectStreamLength(objectLength);
     }
 
-    public PutObjectRequest(Region region, String bucketName,
+    public PutObjectRequest(UFileRegion region, String bucketName,
             String objectKey, InputStream objectStream, Long objectLength, String objectType)
     {
         super(HttpType.PUT, region, bucketName);
@@ -62,7 +62,7 @@ public final class PutObjectRequest
         this.setObjectStreamLength(objectLength);
     }
 
-    public PutObjectRequest(Region region, String bucketName,
+    public PutObjectRequest(UFileRegion region, String bucketName,
             String objectKey, InputStream objectStream, Long objectLength, String objectType, String objectMd5)
     {
         super(HttpType.PUT, region, bucketName);

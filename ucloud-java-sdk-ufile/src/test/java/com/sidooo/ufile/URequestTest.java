@@ -13,6 +13,7 @@
  */
 package com.sidooo.ufile;
 
+import com.sidooo.ucloud.Credentials;
 import com.sidooo.ucloud.UCloudSignatureBuilder;
 import org.junit.After;
 import org.junit.Before;
@@ -22,14 +23,9 @@ import static org.junit.Assert.assertEquals;
 
 public class URequestTest
 {
-    static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
-    private UFileCredentials credentials;
-
     @Before
     public void setup()
     {
-        credentials = new UFileCredentials();
-        credentials.loadConfig(UFILE_CONFIG_FILE);
     }
 
     @After
@@ -40,9 +36,9 @@ public class URequestTest
     @Test
     public void test1()
     {
-        UFileCredentials credentials = new UFileCredentials();
-        credentials.setPublicKey("ucloudsomeone@example.com1296235120854146120");
-        credentials.setPrivateKey("46f09bb9fab4f12dfc160dae12273d5332b5debe");
+        String publicKey = "ucloudsomeone@example.com1296235120854146120";
+        String privateKey = "46f09bb9fab4f12dfc160dae12273d5332b5debe";
+        Credentials credentials = new Credentials(publicKey, privateKey);
 
         CreateUHostInstanceRequest request = new CreateUHostInstanceRequest();
 

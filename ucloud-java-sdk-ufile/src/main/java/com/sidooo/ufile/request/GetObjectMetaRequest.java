@@ -13,7 +13,7 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
@@ -21,7 +21,7 @@ import org.apache.http.Header;
 public final class GetObjectMetaRequest
         extends UObjectRequest
 {
-    public GetObjectMetaRequest(Region region, String bucketName, String objectKey)
+    public GetObjectMetaRequest(UFileRegion region, String bucketName, String objectKey)
     {
         super(HttpType.HEAD, region, bucketName);
         this.setObjectKey(objectKey);

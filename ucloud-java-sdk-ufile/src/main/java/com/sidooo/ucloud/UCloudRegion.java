@@ -13,10 +13,7 @@
  */
 package com.sidooo.ucloud;
 
-/**
- * UCloud Region
- */
-public enum Region
+public enum UCloudRegion
 {
     CN_BJ1("cn-bj1"), // 北京一
     CN_BJ2("cn-bj2"), // 北京二
@@ -38,16 +35,27 @@ public enum Region
     UAE_DUBAI("uae-dubai"),     // 迪拜
     IDN_JAKARTA("idn-jakarta");     // 雅加达
 
-    private String name;
+    private String value;
 
-    Region(String name)
+    UCloudRegion(String value)
     {
-        this.name = name;
+        this.value = value;
+    }
+
+    public String getValue()
+    {
+        return value;
     }
 
     @Override
     public String toString()
     {
-        return name;
+        return value;
+    }
+
+    public static UCloudRegion getEnum(String value)
+    {
+        for (UCloudRegion v : values()) { if (v.getValue().equalsIgnoreCase(value)) { return v; } }
+        throw new IllegalArgumentException();
     }
 }

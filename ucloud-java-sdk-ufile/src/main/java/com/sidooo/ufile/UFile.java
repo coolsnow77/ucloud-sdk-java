@@ -14,7 +14,6 @@
 package com.sidooo.ufile;
 
 import com.sidooo.ucloud.Credentials;
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -39,7 +38,7 @@ public interface UFile
      *
      * @return
      */
-    Region getDefaultRegion();
+    UFileRegion getDefaultRegion();
 
     /**
      * 设置操作的默认Region
@@ -47,7 +46,7 @@ public interface UFile
      * @param region
      * @return
      */
-    UFile setDefaultRegion(Region region);
+    UFile setDefaultRegion(UFileRegion region);
 
     /**
      * 创建UFile Bucket

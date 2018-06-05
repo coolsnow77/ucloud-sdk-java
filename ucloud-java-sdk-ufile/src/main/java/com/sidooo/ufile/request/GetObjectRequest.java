@@ -13,8 +13,8 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.UFileHeaders;
+import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObject;
 import com.sidooo.ufile.model.UObjectInputStream;
@@ -51,13 +51,13 @@ public final class GetObjectRequest
 {
     private static final String CONTENT_RANGE_REGEX = "^bytes ([0-9]+)-([0-9]+)/[0-9]+";
 
-    public GetObjectRequest(Region region, String bucketName, String objectKey)
+    public GetObjectRequest(UFileRegion region, String bucketName, String objectKey)
     {
         super(HttpType.GET, region, bucketName);
         this.setObjectKey(objectKey);
     }
 
-    public GetObjectRequest(Region region, String bucketName, String objectKey, String objectRange)
+    public GetObjectRequest(UFileRegion region, String bucketName, String objectKey, String objectRange)
     {
         super(HttpType.GET, region, bucketName);
         this.setObjectKey(objectKey);

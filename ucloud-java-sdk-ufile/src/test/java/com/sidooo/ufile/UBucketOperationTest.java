@@ -13,7 +13,6 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
 import org.junit.After;
@@ -26,18 +25,14 @@ import static org.junit.Assert.assertEquals;
 
 public class UBucketOperationTest
 {
-    static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
     static final String LOCAL_TEST_FILE = "/Users/kimzhang/Downloads/Jenkins2.png";
-    private UFileCredentials credentials;
     private UFile ufile;
     static final String TEST_BUCKET_NAME = "ufile-sdk-test";
 
     @Before
     public void setup()
     {
-        credentials = new UFileCredentials();
-        credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(credentials, Region.CN_BJ2);
+        ufile = UFileClientBuilder.defaultClient();
     }
 
     @After

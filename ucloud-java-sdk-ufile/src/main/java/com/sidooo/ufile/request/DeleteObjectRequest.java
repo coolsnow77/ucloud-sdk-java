@@ -13,13 +13,13 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 
 public final class DeleteObjectRequest
         extends UObjectRequest
 {
-    public DeleteObjectRequest(Region region, String bucketName, String objectKey)
+    public DeleteObjectRequest(UFileRegion region, String bucketName, String objectKey)
     {
         super(HttpType.DELETE, region, bucketName);
         this.setObjectKey(objectKey);

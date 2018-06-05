@@ -13,14 +13,15 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ucloud.Region;
+
+import com.sidooo.ufile.UFileRegion;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class URequest
 {
-    private final Region region;
+    private final UFileRegion region;
 
     private final HttpType httpType;
 
@@ -34,13 +35,13 @@ public class URequest
      */
     private Map<String, String> headers = new HashMap<String, String>();
 
-    public URequest(HttpType httpType, Region region)
+    public URequest(HttpType httpType, UFileRegion region)
     {
         this.httpType = httpType;
         this.region = region;
     }
 
-    public Region getRegion()
+    public UFileRegion getRegion()
     {
         return this.region;
     }

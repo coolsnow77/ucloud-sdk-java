@@ -13,7 +13,6 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.model.UObject;
 import com.sidooo.ufile.model.UObjectInputStream;
 import com.sidooo.ufile.model.UObjectListing;
@@ -33,9 +32,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class UObjectOperationTest
 {
-    static final String UFILE_CONFIG_FILE = "/Users/kimzhang/.ucloud/ufile.properties";
     static final String LOCAL_TEST_FILE = "/Users/kimzhang/Downloads/test.pdf";
-    private UFileCredentials credentials;
     private UFile ufile;
     static final String TEST_BUCKET = "usql";
     static final String TEST_KEY = "test.pdf";
@@ -43,9 +40,7 @@ public class UObjectOperationTest
     @Before
     public void setup()
     {
-        credentials = new UFileCredentials();
-        credentials.loadConfig(UFILE_CONFIG_FILE);
-        ufile = UFileClientBuilder.standard(credentials, Region.CN_BJ2);
+        ufile = UFileClientBuilder.defaultClient();
     }
 
     @After

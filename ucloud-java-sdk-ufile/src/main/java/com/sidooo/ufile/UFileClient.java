@@ -14,7 +14,6 @@
 package com.sidooo.ufile;
 
 import com.sidooo.ucloud.Credentials;
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -57,7 +56,7 @@ public class UFileClient
     /**
      * UFile操作默认的目标Region
      */
-    private Region defaultRegion;
+    private UFileRegion defaultRegion;
 
     /**
      * Bucket操作执行器
@@ -80,13 +79,13 @@ public class UFileClient
     }
 
     @Override
-    public Region getDefaultRegion()
+    public UFileRegion getDefaultRegion()
     {
         return defaultRegion;
     }
 
     @Override
-    public UFile setDefaultRegion(Region defaultRegion)
+    public UFile setDefaultRegion(UFileRegion defaultRegion)
     {
         this.defaultRegion = defaultRegion;
         return this;

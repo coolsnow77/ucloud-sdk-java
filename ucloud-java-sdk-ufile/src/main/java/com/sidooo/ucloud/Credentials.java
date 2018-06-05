@@ -13,89 +13,34 @@
  */
 package com.sidooo.ucloud;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import static java.util.Objects.requireNonNull;
 
 /**
  * UCloud User Key
+ * 支持从配置文件中加载
+ *
  */
 public class Credentials
 {
-    private String publicKey;
-    private String privateKey;
-    private String proxySuffix;
-    private String downloadProxySuffix;
+    private final String publicKey;
+    private final String privateKey;
+
+    public Credentials(String publicKey, String privateKey)
+    {
+        requireNonNull(publicKey, "publicKey is null.");
+        requireNonNull(privateKey, "privateKey is null.");
+
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+    }
 
     public String getPublicKey()
     {
         return this.publicKey;
     }
 
-    public Credentials setPublicKey(String publicKey)
-    {
-        this.publicKey = publicKey;
-        return this;
-    }
-
     public String getPrivateKey()
     {
         return this.privateKey;
-    }
-
-    public Credentials setPrivateKey(String privateKey)
-    {
-        this.privateKey = privateKey;
-        return this;
-    }
-
-    public String getProxySuffix()
-    {
-        return this.proxySuffix;
-    }
-
-    public Credentials setProxySuffix(String proxySuffix)
-    {
-        this.proxySuffix = proxySuffix;
-        return this;
-    }
-
-    public String getDownloadProxySuffix()
-    {
-        return this.downloadProxySuffix;
-    }
-
-    public Credentials setDownloadProxySuffix(String downloadProxySuffix)
-    {
-        this.downloadProxySuffix = downloadProxySuffix;
-        return this;
-    }
-
-    public void loadConfig(String configPath)
-    {
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(configPath);
-            Properties configProperties = new Properties();
-            configProperties.load(inputStream);
-            this.publicKey = configProperties.getProperty("UCloudPublicKey");
-            this.privateKey = configProperties.getProperty("UCloudPrivateKey");
-            this.proxySuffix = configProperties.getProperty("ProxySuffix");
-            this.downloadProxySuffix = configProperties.getProperty("DownloadProxySuffix");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }

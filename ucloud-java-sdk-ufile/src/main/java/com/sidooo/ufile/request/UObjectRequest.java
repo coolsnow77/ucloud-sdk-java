@@ -13,7 +13,7 @@
  */
 package com.sidooo.ufile.request;
 
-import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 
 import java.io.InputStream;
@@ -52,7 +52,7 @@ public abstract class UObjectRequest
 
     private Long contentLength = Long.valueOf(-1);
 
-    public UObjectRequest(HttpType httpType, Region region, String bucketName)
+    public UObjectRequest(HttpType httpType, UFileRegion region, String bucketName)
     {
         super(httpType, region);
         this.bucketName = bucketName;

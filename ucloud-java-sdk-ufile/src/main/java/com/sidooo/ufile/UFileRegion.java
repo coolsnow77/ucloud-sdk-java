@@ -11,25 +11,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sidooo.ufile.request;
+package com.sidooo.ufile;
 
-import com.sidooo.ufile.UFileRegion;
-import com.sidooo.ufile.exception.UFileServiceException;
-
-public abstract class UBucketRequest
-        extends URequest
+public enum UFileRegion
 {
-    public UBucketRequest(HttpType httpType, String actionName, UFileRegion region)
+    CN_BJ("cn-bj"),
+    HK("hk"),
+    CN_GD("cn-gd"),
+    CN_SH2("cn-sh2"),
+    US_CA("us-ca");
+
+    private String value;
+
+    UFileRegion(String value)
     {
-        super(httpType, region);
-        this.addParameter("Action", actionName);
+        this.value = value;
     }
 
-    public String getActionName()
+    public String getValue()
     {
-        return getParameter("Action");
+        return this.value;
     }
 
-    public abstract Object execute(BucketExecutor executor)
-            throws UFileServiceException;
+    @Override
+    public String toString()
+    {
+        return value;
+    }
+
+    public static UFileRegion getEnum(String value)
+    {
+        for (UFileRegion v : values()) { if (v.getValue().equalsIgnoreCase(value)) { return v; } }
+        throw new IllegalArgumentException();
+    }
+
 }

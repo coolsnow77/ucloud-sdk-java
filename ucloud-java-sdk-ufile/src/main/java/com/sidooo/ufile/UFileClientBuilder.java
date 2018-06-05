@@ -14,28 +14,89 @@
 package com.sidooo.ufile;
 
 import com.sidooo.ucloud.Credentials;
-import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.request.BucketExecutor;
 import com.sidooo.ufile.request.ObjectExecutor;
 
-import static com.sidooo.ucloud.Region.CN_BJ2;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import static java.util.Objects.requireNonNull;
 
 public final class UFileClientBuilder
 {
     private UFileClientBuilder() {}
 
-    // 从系统配置文件中加载
-    public static UFile defaultClient(String configFile)
+    /**
+     * 从默认的配置文件中加载
+     *
+     * @return
+     */
+    public static UFile defaultClient()
     {
-        requireNonNull(configFile, "config file is null.");
-
-        Credentials credentials = new Credentials();
-        credentials.loadConfig(configFile);
-        return standard(credentials, CN_BJ2);
+        String userHome = System.getProperty("user.home");
+        String defaultPropertyFile = userHome + "/.ucloud/ufile.properties";
+        return standard(defaultPropertyFile);
     }
 
-    public static UFile standard(Credentials credentials, Region defaultRegion)
+    /**
+     * 从系统配置文件中加载
+     * UCloudPublicKey=<公钥>
+     * UCloudPrivateKey=<私钥>
+     * DefaultRegion=<Region>
+     *
+     * @param propertyFilePath
+     * @return
+     */
+    public static UFile standard(String propertyFilePath)
+    {
+        // 对用户输入的配置文件进行检查
+        requireNonNull(propertyFilePath, "config file is null.");
+        File propertyFile = new File(propertyFilePath);
+        if (!propertyFile.isFile() || !propertyFile.canRead()) {
+            throw new RuntimeException("read property file failed. file: " + propertyFilePath);
+        }
+
+        // 加载配置文件
+        Properties properties = new Properties();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(propertyFile);
+            properties.load(inputStream);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        String publicKey = properties.getProperty("UCloudPublicKey");
+        if (publicKey == null) {
+            throw new RuntimeException("UCloudPublicKey missing in configure file.");
+        }
+        String privateKey = properties.getProperty("UCloudPrivateKey");
+        if (privateKey == null) {
+            throw new RuntimeException("UCloudPrivateKey missing in configure file.");
+        }
+        Credentials credentials = new Credentials(publicKey, privateKey);
+
+        String defaultUFileRegion = properties.getProperty("DefaultUFileRegion", "cn-bj");
+        UFileRegion region = UFileRegion.getEnum(defaultUFileRegion);
+
+        return standard(credentials, region);
+    }
+
+    public static UFile standard(Credentials credentials, UFileRegion defaultRegion)
     {
         requireNonNull(credentials, "credentials is null.");
         requireNonNull(defaultRegion, "default region is null.");

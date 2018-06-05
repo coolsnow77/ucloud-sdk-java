@@ -15,14 +15,14 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sidooo.ucloud.Region;
+import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 
 public final class GetBucketRequest
         extends UBucketRequest
 {
-    public GetBucketRequest(Region region, String bucketName)
+    public GetBucketRequest(UFileRegion region, String bucketName)
     {
         super(HttpType.GET, "DescribeBucket", region);
         this.addParameter("BucketName", bucketName);
