@@ -49,12 +49,24 @@ import static java.util.Objects.requireNonNull;
 public class UFileClient
         implements UFile
 {
+    /**
+     * 用户的UCloud身份信息
+     */
     private final Credentials credentials;
 
+    /**
+     * UFile操作默认的目标Region
+     */
     private Region defaultRegion;
 
+    /**
+     * Bucket操作执行器
+     */
     private final BucketExecutor bucketExecutor;
 
+    /**
+     * Object操作执行器
+     */
     private final ObjectExecutor objectExecutor;
 
     public UFileClient(

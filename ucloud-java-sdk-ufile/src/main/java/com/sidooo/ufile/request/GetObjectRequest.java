@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  *   ErrMsg:  错误提示
  */
 
-public class GetObjectRequest
+public final class GetObjectRequest
         extends UObjectRequest
 {
     private static final String CONTENT_RANGE_REGEX = "^bytes ([0-9]+)-([0-9]+)/[0-9]+";

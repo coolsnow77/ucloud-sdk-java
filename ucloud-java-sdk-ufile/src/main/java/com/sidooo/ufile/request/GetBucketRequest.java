@@ -19,7 +19,7 @@ import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 
-public class GetBucketRequest
+public final class GetBucketRequest
         extends UBucketRequest
 {
     public GetBucketRequest(Region region, String bucketName)

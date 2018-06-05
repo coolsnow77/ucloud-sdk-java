@@ -18,7 +18,7 @@ import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
 
-public class GetObjectMetaRequest
+public final class GetObjectMetaRequest
         extends UObjectRequest
 {
     public GetObjectMetaRequest(Region region, String bucketName, String objectKey)

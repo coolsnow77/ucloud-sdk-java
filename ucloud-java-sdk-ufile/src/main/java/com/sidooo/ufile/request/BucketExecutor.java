@@ -32,7 +32,7 @@ import org.apache.http.client.utils.URIBuilder;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-public class BucketExecutor
+public final class BucketExecutor
         extends AbstractExcector
 {
     protected static final String UCLOUD_API_HOST = "api.ucloud.cn";

@@ -23,7 +23,7 @@ import com.sidooo.ufile.model.UObjectSummary;
 
 import java.util.Date;
 
-/*
+/**
  * Request Parameters
  *   None
  *
@@ -42,9 +42,8 @@ import java.util.Date;
  *   NextMarker:
  *   DataSet:
  *
- *
  */
-public class ListObjectRequest
+public final class ListObjectRequest
         extends UObjectRequest
 {
     private String prefix;

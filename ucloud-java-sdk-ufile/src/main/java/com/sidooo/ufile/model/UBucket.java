@@ -13,6 +13,9 @@
  */
 package com.sidooo.ufile.model;
 
+/**
+ * UFile Bucket
+ */
 public class UBucket
 {
     private String id;
@@ -37,9 +40,10 @@ public class UBucket
         return this.id;
     }
 
-    public void setId(String id)
+    public UBucket setId(String id)
     {
         this.id = id;
+        return this;
     }
 
     public String getName()
@@ -47,8 +51,9 @@ public class UBucket
         return this.name;
     }
 
-    public void setName(String name)
+    public UBucket setName(String name)
     {
         this.name = name;
+        return this;
     }
 }

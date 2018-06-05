@@ -18,7 +18,7 @@ import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 
-public class CreateBucketRequest
+public final class CreateBucketRequest
         extends UBucketRequest
 {
     public CreateBucketRequest(Region region, String bucketName)

@@ -20,7 +20,7 @@ import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
 
-public class ListBucketRequest
+public final class ListBucketRequest
         extends UBucketRequest
 {
     // 输入参数

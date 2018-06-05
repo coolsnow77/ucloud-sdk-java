@@ -40,7 +40,7 @@ import java.io.InputStream;
  *   ETag:   文件哈希值
  *   X-SessionId:   会话ID
  */
-public class PutObjectRequest
+public final class PutObjectRequest
         extends UObjectRequest
 {
     public PutObjectRequest(Region region, String bucketName,

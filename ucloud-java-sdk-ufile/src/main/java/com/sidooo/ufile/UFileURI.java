@@ -19,6 +19,9 @@ import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * UFile URI解析器
+ */
 public class UFileURI
 {
     private static final Pattern ENDPOINT_PATTERN =

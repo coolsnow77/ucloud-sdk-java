@@ -13,6 +13,9 @@
  */
 package com.sidooo.ufile.exception;
 
+/**
+ * UFile SDK Client 异常
+ */
 public class UFileClientException
         extends RuntimeException
 {

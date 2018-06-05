@@ -21,7 +21,7 @@ import com.sidooo.ufile.request.ObjectExecutor;
 import static com.sidooo.ucloud.Region.CN_BJ2;
 import static java.util.Objects.requireNonNull;
 
-public class UFileClientBuilder
+public final class UFileClientBuilder
 {
     private UFileClientBuilder() {}
 

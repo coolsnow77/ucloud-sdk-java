@@ -16,7 +16,7 @@ package com.sidooo.ufile.request;
 import com.sidooo.ucloud.Region;
 import com.sidooo.ufile.exception.UFileServiceException;
 
-public class DeleteObjectRequest
+public final class DeleteObjectRequest
         extends UObjectRequest
 {
     public DeleteObjectRequest(Region region, String bucketName, String objectKey)

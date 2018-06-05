@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * UCloud User Key
+ */
 public class Credentials
 {
     private String publicKey;

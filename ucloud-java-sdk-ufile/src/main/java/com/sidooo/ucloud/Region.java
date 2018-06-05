@@ -13,6 +13,9 @@
  */
 package com.sidooo.ucloud;
 
+/**
+ * UCloud Region
+ */
 public enum Region
 {
     CN_BJ1("cn-bj1"), // 北京一

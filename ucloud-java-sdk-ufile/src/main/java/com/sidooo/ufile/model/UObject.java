@@ -16,6 +16,9 @@ package com.sidooo.ufile.model;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * UFile Object
+ */
 public class UObject
 {
     /** The name of the bucket in which this object is contained */

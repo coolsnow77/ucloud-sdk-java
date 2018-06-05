@@ -43,7 +43,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
 
-public class ObjectExecutor
+public final class ObjectExecutor
         extends AbstractExcector
 {
     public static final String AUTHORIZATION = "Authorization";

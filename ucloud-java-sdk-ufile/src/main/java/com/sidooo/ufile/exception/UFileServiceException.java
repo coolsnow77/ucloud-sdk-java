@@ -13,6 +13,9 @@
  */
 package com.sidooo.ufile.exception;
 
+/**
+ * UFile Server 异常
+ */
 public class UFileServiceException
         extends RuntimeException
 {
