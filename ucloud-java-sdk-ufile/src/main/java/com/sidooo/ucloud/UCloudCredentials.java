@@ -22,12 +22,12 @@ import static java.util.Objects.requireNonNull;
  * 支持从配置文件中加载
  *
  */
-public class Credentials
+public class UCloudCredentials
 {
     private final String publicKey;
     private final String privateKey;
 
-    public Credentials(String publicKey, String privateKey)
+    public UCloudCredentials(String publicKey, String privateKey)
     {
         requireNonNull(publicKey, "publicKey is null.");
         requireNonNull(privateKey, "privateKey is null.");

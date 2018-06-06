@@ -15,7 +15,7 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Credentials;
+import com.sidooo.ucloud.UCloudCredentials;
 import com.sidooo.ufile.request.BucketExecutor;
 import com.sidooo.ufile.request.ObjectExecutor;
 
@@ -90,7 +90,7 @@ public final class UFileClientBuilder
         if (privateKey == null) {
             throw new RuntimeException("UCloudPrivateKey missing in configure file.");
         }
-        Credentials credentials = new Credentials(publicKey, privateKey);
+        UCloudCredentials credentials = new UCloudCredentials(publicKey, privateKey);
 
         String defaultUFileRegion = properties.getProperty("DefaultUFileRegion", "cn-bj");
         UFileRegion region = UFileRegion.getEnum(defaultUFileRegion);
@@ -98,7 +98,7 @@ public final class UFileClientBuilder
         return standard(credentials, region);
     }
 
-    public static UFile standard(Credentials credentials, UFileRegion defaultRegion)
+    public static UFile standard(UCloudCredentials credentials, UFileRegion defaultRegion)
     {
         requireNonNull(credentials, "credentials is null.");
         requireNonNull(defaultRegion, "default region is null.");

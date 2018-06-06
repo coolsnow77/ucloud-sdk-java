@@ -15,7 +15,7 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Credentials;
+import com.sidooo.ucloud.UCloudCredentials;
 import com.sidooo.ufile.request.UObjectRequest;
 
 import java.util.Map;
@@ -57,7 +57,7 @@ public class UFileSignatureBuilder
         }
     }
 
-    public static String getSignature(UObjectRequest request, String objectkey, Credentials credentials)
+    public static String getSignature(UObjectRequest request, String objectkey, UCloudCredentials credentials)
     {
         String contentMD5 = request.getContentMD5();
         String contentType = request.getContentType();

@@ -15,7 +15,7 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Credentials;
+import com.sidooo.ucloud.UCloudCredentials;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -33,7 +33,7 @@ public interface UFile
      *
      * @return ucloud credentials
      */
-    Credentials getCredentials();
+    UCloudCredentials getCredentials();
 
     /**
      * 获取客户端默认的Region

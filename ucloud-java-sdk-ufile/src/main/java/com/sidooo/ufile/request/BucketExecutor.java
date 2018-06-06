@@ -17,7 +17,7 @@ package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sidooo.ucloud.Credentials;
+import com.sidooo.ucloud.UCloudCredentials;
 import com.sidooo.ucloud.UCloudSignatureBuilder;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
@@ -39,7 +39,7 @@ public final class BucketExecutor
 {
     protected static final String UCLOUD_API_HOST = "api.ucloud.cn";
 
-    public BucketExecutor(Credentials credentials)
+    public BucketExecutor(UCloudCredentials credentials)
     {
         super(credentials);
     }

@@ -10,7 +10,6 @@
         <version>1.4</version>
     </parent>
     
-    <groupId>com.sidooo</groupId>
     <artifactId>ucloud-java-sdk-ufile</artifactId>
 
     <licenses>
@@ -23,8 +22,6 @@
 
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
-        <air.check.skip-checkstyle>false</air.check.skip-checkstyle>
-        <air.check.skip-license>false</air.check.skip-license>
     </properties>
 
     <dependencies>

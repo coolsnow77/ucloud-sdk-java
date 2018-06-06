@@ -15,7 +15,7 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Credentials;
+import com.sidooo.ucloud.UCloudCredentials;
 import com.sidooo.ufile.exception.UFileClientException;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -53,7 +53,7 @@ public class UFileClient
     /**
      * 用户的UCloud身份信息
      */
-    private final Credentials credentials;
+    private final UCloudCredentials credentials;
 
     /**
      * UFile操作默认的目标Region
@@ -71,7 +71,7 @@ public class UFileClient
     private final ObjectExecutor objectExecutor;
 
     public UFileClient(
-            Credentials credentials,
+            UCloudCredentials credentials,
             BucketExecutor bucketExecutor,
             ObjectExecutor objectExecutor)
     {
@@ -94,7 +94,7 @@ public class UFileClient
     }
 
     @Override
-    public Credentials getCredentials()
+    public UCloudCredentials getCredentials()
     {
         return this.credentials;
     }

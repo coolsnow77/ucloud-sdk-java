@@ -28,7 +28,7 @@ public class UCloudSignatureBuilder
     {
     }
 
-    public static String getHttpString(UBucketRequest request, Credentials credentials)
+    public static String getHttpString(UBucketRequest request, UCloudCredentials credentials)
     {
         Map<String, String> sortedMap = new TreeMap<String, String>();
         sortedMap.put("PublicKey", credentials.getPublicKey());
@@ -46,7 +46,7 @@ public class UCloudSignatureBuilder
         return httpString;
     }
 
-    public static String getAPIString(UBucketRequest request, Credentials credentials)
+    public static String getAPIString(UBucketRequest request, UCloudCredentials credentials)
     {
         // 将字符串进行排序
         Map<String, String> sortedMap = new TreeMap<String, String>();
@@ -63,7 +63,7 @@ public class UCloudSignatureBuilder
         return result + credentials.getPrivateKey();
     }
 
-    public static String getSignature(UBucketRequest request, Credentials credentials)
+    public static String getSignature(UBucketRequest request, UCloudCredentials credentials)
     {
         String signatureString = getAPIString(request, credentials);
 
