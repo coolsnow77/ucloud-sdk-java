@@ -25,6 +25,7 @@ import com.sidooo.ufile.model.UObjectListing;
 import com.sidooo.ufile.model.UObjectMetadata;
 
 import java.io.File;
+import java.io.InputStream;
 
 public interface UFile
 {
@@ -51,15 +52,39 @@ public interface UFile
     UFile setDefaultRegion(UFileRegion region);
 
     /**
-     * 创建UFile Bucket
+     * 在默认的Region下创建Public权限的Bucket
+     *
+     * @param bucketName
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UBucket createBucket(String bucketName)
+            throws UFileClientException, UFileServiceException;
+
+    /**
+     * 在默认的Region下创建指定权限的UFile Bucket
      *
      * @param bucketName  Bucket名称
-     * @param type  Bucket类型
+     * @param bucketType  Bucket类型
      * @return ufile bucket
      * @throws UFileClientException   SDK客户端异常
      * @throws UFileServiceException  UFile服务异常
      */
-    UBucket createBucket(String bucketName, String type)
+    UBucket createBucket(String bucketName, BucketType bucketType)
+            throws UFileClientException, UFileServiceException;
+
+    /**
+     * 在指定的Region中创建UFile Bucket
+     *
+     * @param bucketName
+     * @param bucketType
+     * @param region
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UBucket createBucket(String bucketName, BucketType bucketType, UFileRegion region)
             throws UFileClientException, UFileServiceException;
 
     /**
@@ -159,6 +184,19 @@ public interface UFile
      * @throws UFileServiceException
      */
     UObjectMetadata putObject(String bucketName, String key, File file)
+            throws UFileClientException, UFileServiceException;
+
+    /**
+     * 将数据流上传到UFile中
+     *
+     * @param bucketName
+     * @param key
+     * @param input
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObjectMetadata putObject(String bucketName, String key, InputStream input)
             throws UFileClientException, UFileServiceException;
 
     /**

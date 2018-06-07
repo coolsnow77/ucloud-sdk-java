@@ -110,13 +110,35 @@ public class UFileClient
 //    }
 
     @Override
-    public UBucket createBucket(String bucketName, String type)
+    public UBucket createBucket(String bucketName)
             throws UFileClientException, UFileServiceException
     {
         requireNonNull(bucketName, "bucketName is null");
-        requireNonNull(type, "bucketType is null");
 
-        CreateBucketRequest request = new CreateBucketRequest(defaultRegion, bucketName, type);
+        CreateBucketRequest request = new CreateBucketRequest(defaultRegion, bucketName, BucketType.PUBLIC);
+        return (UBucket) request.execute(bucketExecutor);
+    }
+
+    @Override
+    public UBucket createBucket(String bucketName, BucketType bucketType)
+            throws UFileClientException, UFileServiceException
+    {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(bucketType, "bucketType is null");
+
+        CreateBucketRequest request = new CreateBucketRequest(defaultRegion, bucketName, bucketType);
+        return (UBucket) request.execute(bucketExecutor);
+    }
+
+    @Override
+    public UBucket createBucket(String bucketName, BucketType type, UFileRegion region)
+            throws UFileClientException, UFileServiceException
+    {
+        requireNonNull(bucketName, "bucketName is null.");
+        requireNonNull(type, "type is null.");
+        requireNonNull(region, "region is null.");
+
+        CreateBucketRequest request = new CreateBucketRequest(region, bucketName, type);
         return (UBucket) request.execute(bucketExecutor);
     }
 
@@ -268,6 +290,26 @@ public class UFileClient
             throw new UFileClientException(e);
         }
         PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, file.length());
+        return (UObjectMetadata) request.execute(objectExecutor);
+    }
+
+    @Override
+    public UObjectMetadata putObject(String bucketName, String key, InputStream objectStream)
+            throws UFileClientException, UFileServiceException
+    {
+        requireNonNull(bucketName, "bucketName is null.");
+        requireNonNull(key, "key is null.");
+        requireNonNull(objectStream, "objectStream is null.");
+
+        int length = 0;
+        try {
+            length = objectStream.available();
+        }
+        catch (IOException e) {
+            throw new UFileClientException(e);
+        }
+
+        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, Long.valueOf((long)length));
         return (UObjectMetadata) request.execute(objectExecutor);
     }
 

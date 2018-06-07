@@ -16,6 +16,7 @@
 package com.sidooo.ufile.request;
 
 import com.google.gson.JsonObject;
+import com.sidooo.ufile.BucketType;
 import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
@@ -25,14 +26,14 @@ public final class CreateBucketRequest
 {
     public CreateBucketRequest(UFileRegion region, String bucketName)
     {
-        this(region, bucketName, "public");
+        this(region, bucketName, BucketType.PUBLIC);
     }
 
-    public CreateBucketRequest(UFileRegion region, String bucketName, String bucketType)
+    public CreateBucketRequest(UFileRegion region, String bucketName, BucketType bucketType)
     {
         super(HttpType.GET, "CreateBucket", region);
         this.addParameter("BucketName", bucketName);
-        this.addParameter("Type", bucketType);
+        this.addParameter("Type", bucketType.getValue());
         this.addParameter("Region", region.getValue());
     }
 
