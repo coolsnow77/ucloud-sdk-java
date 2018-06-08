@@ -265,6 +265,9 @@ application/vnd.novadigm.edx
 application/vnd.novadigm.ext
 application/vnd.obn
 application/vnd.osa.netdeploy
+application/vnd.openxmlformats-officedocument.wordprocessingml.document 	docx
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet 	xlsx
+application/vnd.openxmlformats-officedocument.presentationml.presentation 	pptx
 application/vnd.palm
 application/vnd.pg.format
 application/vnd.pg.osasli

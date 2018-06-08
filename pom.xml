@@ -10,7 +10,7 @@
 
     <groupId>com.sidooo</groupId>
     <artifactId>ucloud-java-sdk-root</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <packaging>pom</packaging>
 
     <name>ucloud-java-sdk-root</name>
@@ -30,7 +30,7 @@
     <scm>
         <connection>scm:git:git://github.com/sidooo/ucloud-sdk-java.git</connection>
         <url>https://github.com/sidooo/ucloud-sdk-java</url>
-        <tag>1.4</tag>
+        <tag>1.4.1</tag>
     </scm>
 
     <developers>
@@ -76,7 +76,7 @@
 
     <modules>
         <module>ucloud-java-sdk-ufile</module>
-        <module>ucloud-java-sdk-usql</module>
+        <!--<module>ucloud-java-sdk-usql</module>-->
     </modules>
 
     <dependencyManagement>
