@@ -294,6 +294,37 @@ public class UFileClient
     }
 
     @Override
+    public UObjectMetadata getObjectMetadata(String bucketName, String key)
+            throws UFileClientException, UFileServiceException
+    {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+
+        GetObjectMetaRequest request = new GetObjectMetaRequest(defaultRegion, bucketName, key);
+        return (UObjectMetadata) request.execute(objectExecutor);
+    }
+
+    @Override
+    public UObjectMetadata putObject(String bucketName, String key, File file, String contentType)
+            throws UFileClientException, UFileServiceException
+    {
+        requireNonNull(bucketName, "bucketName is null");
+        requireNonNull(key, "objectKey is null");
+        requireNonNull(file, "targetFile is null");
+        requireNonNull(contentType, "contentType is null");
+
+        InputStream objectStream;
+        try {
+            objectStream = new FileInputStream(file);
+        }
+        catch (FileNotFoundException e) {
+            throw new UFileClientException(e);
+        }
+        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, file.length(), contentType);
+        return (UObjectMetadata) request.execute(objectExecutor);
+    }
+
+    @Override
     public UObjectMetadata putObject(String bucketName, String key, InputStream objectStream)
             throws UFileClientException, UFileServiceException
     {
