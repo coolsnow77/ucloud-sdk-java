@@ -223,7 +223,7 @@ public interface UFile
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObjectMetadata putObject(String bucketName, String key, InputStream input)
+    UObjectMetadata putObject(String bucketName, String key, InputStream input, String contentType)
             throws UFileClientException, UFileServiceException;
 
     /**

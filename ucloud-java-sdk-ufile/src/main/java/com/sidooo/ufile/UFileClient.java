@@ -46,6 +46,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 public class UFileClient
@@ -186,7 +187,7 @@ public class UFileClient
     public UObject getObject(String bucketName, String key, long offset)
             throws UFileClientException, UFileServiceException
     {
-        return getObject(bucketName, key, offset,  Integer.MAX_VALUE - 1);
+        return getObject(bucketName, key, offset, Integer.MAX_VALUE - 1);
     }
 
     @Override
@@ -293,15 +294,8 @@ public class UFileClient
         requireNonNull(key, "objectKey is null");
         requireNonNull(file, "targetFile is null");
 
-        InputStream objectStream;
-        try {
-            objectStream = new FileInputStream(file);
-        }
-        catch (FileNotFoundException e) {
-            throw new UFileClientException(e);
-        }
-        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, file.length());
-        return (UObjectMetadata) request.execute(objectExecutor);
+        String mimeType = Mimetypes.getInstance().getMimetype(file);
+        return putObject(bucketName, key, file, mimeType);
     }
 
     @Override
@@ -313,6 +307,8 @@ public class UFileClient
         requireNonNull(file, "targetFile is null");
         requireNonNull(contentType, "contentType is null");
 
+        checkState(Mimetypes.getInstance().existMimeType(contentType), "contentType is illegal");
+
         InputStream objectStream;
         try {
             objectStream = new FileInputStream(file);
@@ -320,17 +316,18 @@ public class UFileClient
         catch (FileNotFoundException e) {
             throw new UFileClientException(e);
         }
-        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, file.length(), contentType);
-        return (UObjectMetadata) request.execute(objectExecutor);
+        return putObject(bucketName, key, objectStream, contentType);
     }
 
     @Override
-    public UObjectMetadata putObject(String bucketName, String key, InputStream objectStream)
+    public UObjectMetadata putObject(String bucketName, String key, InputStream objectStream, String contentType)
             throws UFileClientException, UFileServiceException
     {
         requireNonNull(bucketName, "bucketName is null.");
         requireNonNull(key, "key is null.");
         requireNonNull(objectStream, "objectStream is null.");
+
+        checkState(Mimetypes.getInstance().existMimeType(contentType), "contentType is illegal");
 
         int length = 0;
         try {
@@ -340,7 +337,8 @@ public class UFileClient
             throw new UFileClientException(e);
         }
 
-        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, Long.valueOf((long)length));
+        PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key,
+                objectStream, Long.valueOf((long) length));
         return (UObjectMetadata) request.execute(objectExecutor);
     }
 
@@ -354,7 +352,8 @@ public class UFileClient
         try {
             getObjectMetadata(bucketName, objectKey);
             return true;
-        } catch (UFileServiceException e) {
+        }
+        catch (UFileServiceException e) {
             if (e.getReturnCode() == 404) {
                 return false;
             }
