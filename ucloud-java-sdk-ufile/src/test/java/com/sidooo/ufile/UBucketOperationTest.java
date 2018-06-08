@@ -76,7 +76,7 @@ public class UBucketOperationTest
         UBucketListing buckets = ufile.listBuckets();
 
         // 创建bucket
-        UBucket newBucket = ufile.createBucket(bucketName, "public");
+        UBucket newBucket = ufile.createBucket(bucketName, BucketType.PUBLIC);
         assertEquals(newBucket.getName(), bucketName);
 
         // 获取bucket信息

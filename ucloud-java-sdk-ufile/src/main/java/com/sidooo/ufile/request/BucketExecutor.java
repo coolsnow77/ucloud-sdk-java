@@ -87,26 +87,27 @@ public final class BucketExecutor
 
         try {
             HttpResponse httpResponse = httpClient.execute(httpRequest);
-            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+            int httpStatusCode =  httpResponse.getStatusLine().getStatusCode();
+            if (httpStatusCode == 200) {
                 String content = getContentAsString(httpResponse.getEntity().getContent());
                 JsonParser parser = new JsonParser();
                 JsonObject json = parser.parse(content).getAsJsonObject();
 
                 if (!json.has("RetCode")) {
-                    throw new UFileServiceException("RetCode missing.");
+                    throw new UFileServiceException(httpStatusCode, "RetCode missing.");
                 }
                 Long returnCode = json.get("RetCode").getAsLong();
                 if (returnCode != 0) {
-                    throw new UFileServiceException("Return Code error: " + content);
+                    throw new UFileServiceException(httpStatusCode, "Return Code error: " + content);
                 }
                 json.remove("RetCode");
 
                 if (!json.has("Action")) {
-                    throw new UFileServiceException("Action missing.");
+                    throw new UFileServiceException(httpStatusCode, "Action missing.");
                 }
                 String action = json.get("Action").getAsString();
                 if (!action.equals(request.getActionName() + "Response")) {
-                    throw new UFileServiceException("Action mismatch: " + action);
+                    throw new UFileServiceException(httpStatusCode, "Action mismatch: " + action);
                 }
                 json.remove("Action");
                 return new UResponse(json);
@@ -118,21 +119,21 @@ public final class BucketExecutor
                     JsonParser parser = new JsonParser();
                     JsonObject jsonResponse = parser.parse(content).getAsJsonObject();
                     if (!jsonResponse.has("RetCode")) {
-                        throw new UFileServiceException("RetCode missing.");
+                        throw new UFileServiceException(httpStatusCode, "RetCode missing.");
                     }
                     Long returnCode = jsonResponse.get("RetCode").getAsLong();
                     if (returnCode != 0) {
-                        throw new UFileServiceException("Return Code:" + returnCode);
+                        throw new UFileServiceException(httpStatusCode, "Return Code:" + returnCode);
                     }
 
                     if (jsonResponse.has("Message")) {
                         String message = jsonResponse.get("Message").getAsString();
-                        throw new UFileServiceException(returnCode, message);
+                        throw new UFileServiceException(httpStatusCode, returnCode, message);
                     }
-                    throw new UFileServiceException(returnCode);
+                    throw new UFileServiceException(httpStatusCode, returnCode);
                 }
                 else {
-                    throw new UFileServiceException("Http Status Code:" + httpResponse.getStatusLine().getStatusCode());
+                    throw new UFileServiceException(httpStatusCode);
                 }
             }
         }

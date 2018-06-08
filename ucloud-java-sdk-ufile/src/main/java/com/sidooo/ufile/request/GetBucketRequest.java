@@ -39,20 +39,20 @@ public final class GetBucketRequest
         UResponse response = executor.execute(this);
         JsonObject json = response.getResponse();
         if (!json.has("DataSet")) {
-            throw new UFileServiceException("DataSet missing.");
+            throw new UFileServiceException(200, "DataSet missing.");
         }
         JsonArray dataSet = json.getAsJsonArray("DataSet");
         if (dataSet.size() != 1) {
-            throw new UFileServiceException(("Multiple bucket exists in GetBucketResponse."));
+            throw new UFileServiceException(200, "Multiple bucket exists in GetBucketResponse.");
         }
         JsonObject jsonBucket = dataSet.get(0).getAsJsonObject();
         if (!jsonBucket.has("BucketName")) {
-            throw new UFileServiceException("Bucket Name missing.");
+            throw new UFileServiceException(200, "Bucket Name missing.");
         }
         String bucketName = jsonBucket.get("BucketName").getAsString();
 
         if (!jsonBucket.has("BucketId")) {
-            throw new UFileServiceException("Bucket Id missing.");
+            throw new UFileServiceException(200, "Bucket Id missing.");
         }
         String bucketId = jsonBucket.get("BucketId").getAsString();
 

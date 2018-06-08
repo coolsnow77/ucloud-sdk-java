@@ -73,12 +73,17 @@ public class UObjectOperationTest
     public void test1()
             throws Exception
     {
+        if (ufile.doesObjectExist(TEST_BUCKET, TEST_KEY)) {
+            ufile.deleteObject(TEST_BUCKET, TEST_KEY);
+        }
         File testFile = new File(LOCAL_TEST_FILE);
         UObjectMetadata newObjectMetadata = ufile.putObject(TEST_BUCKET, TEST_KEY, testFile);
 
         UObjectMetadata existObjectMetadatae = ufile.getObjectMetadata(TEST_BUCKET, TEST_KEY);
         assertEquals(existObjectMetadatae.getETag(), newObjectMetadata.getETag());
         assertEquals(testFile.length(), existObjectMetadatae.getContentLength());
+        assertEquals("application/pdf", existObjectMetadatae.getContentType());
+
 
         existObjectMetadatae = ufile.getObject(TEST_BUCKET, TEST_KEY, new File("/Users/kimzhang/Downloads/temp.pdf"));
         String deleteObjectKey = ufile.deleteObject(TEST_BUCKET, TEST_KEY);
@@ -135,6 +140,29 @@ public class UObjectOperationTest
         byte[] buffer = new byte[32];
         stream.read(buffer);
         assertEquals("olate lace|Manufacturer#1|Brand#", new String(buffer));
+    }
+
+    /**
+     * 测试文件上传是指定ContentType
+     */
+    @Test(expected = Test.None.class)
+    public void test4()
+            throws Exception
+    {
+        if (ufile.doesObjectExist(TEST_BUCKET, TEST_KEY)) {
+            ufile.deleteObject(TEST_BUCKET, TEST_KEY);
+        }
+        File testFile = new File(LOCAL_TEST_FILE);
+        UObjectMetadata newObjectMetadata = ufile.putObject(TEST_BUCKET, TEST_KEY, testFile, "image/png");
+
+        UObjectMetadata existObjectMetadatae = ufile.getObjectMetadata(TEST_BUCKET, TEST_KEY);
+        assertEquals(existObjectMetadatae.getETag(), newObjectMetadata.getETag());
+        assertEquals(testFile.length(), existObjectMetadatae.getContentLength());
+        assertEquals("image/png", existObjectMetadatae.getContentType());
+
+        existObjectMetadatae = ufile.getObject(TEST_BUCKET, TEST_KEY, new File("/Users/kimzhang/Downloads/temp.pdf"));
+        String deleteObjectKey = ufile.deleteObject(TEST_BUCKET, TEST_KEY);
+        assertEquals(deleteObjectKey, TEST_KEY);
     }
 
 //

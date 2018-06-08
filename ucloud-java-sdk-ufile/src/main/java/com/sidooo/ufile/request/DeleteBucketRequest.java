@@ -38,7 +38,7 @@ public final class DeleteBucketRequest
         UResponse response = executor.execute(this);
         JsonObject json = response.getResponse();
         if (!json.has("BucketId")) {
-            throw new UFileServiceException("Bucket Id missing.");
+            throw new UFileServiceException(200, "Bucket Id missing.");
         }
         return json.get("BucketId").getAsString();
     }

@@ -52,7 +52,7 @@ public final class ListBucketRequest
         UResponse response = executor.execute(this);
         JsonObject json = response.getResponse();
         if (!json.has("DataSet")) {
-            throw new UFileServiceException("DataSet missing.");
+            throw new UFileServiceException(200, "DataSet missing.");
         }
         JsonArray dataSet = json.getAsJsonArray("DataSet");
         UBucketListing buckets = new UBucketListing();

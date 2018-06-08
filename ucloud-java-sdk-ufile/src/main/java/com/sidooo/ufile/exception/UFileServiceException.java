@@ -29,44 +29,65 @@ public class UFileServiceException
 
     private final String errorMessage;
 
-    public UFileServiceException(Long returnCode)
+    private final int httpStatusCode;
+
+    public UFileServiceException(int httpStatusCode)
+    {
+        super((String) null);
+        this.httpStatusCode = httpStatusCode;
+        this.returnCode = 0L;
+        this.requestId = "0";
+        this.errorMessage = "";
+    }
+
+    public UFileServiceException(int httpStatusCode, Long returnCode)
     {
         super((String) null);
         this.returnCode = returnCode;
         this.requestId = "0";
         this.errorMessage = "";
+        this.httpStatusCode = httpStatusCode;
     }
 
-    public UFileServiceException(String errorMessage)
+    public UFileServiceException(int httpStatusCode, String errorMessage)
     {
         super((String) null);
         requestId = "0";
         this.returnCode = Long.valueOf(-1);
         this.errorMessage = errorMessage;
+        this.httpStatusCode = httpStatusCode;
     }
 
-    public UFileServiceException(String requestId, String errorMessage)
+    public UFileServiceException(int httpStatusCode, String requestId, String errorMessage)
     {
         super((String) null);
         this.returnCode = Long.valueOf(-1);
         this.requestId = requestId;
         this.errorMessage = errorMessage;
+        this.httpStatusCode = httpStatusCode;
     }
 
-    public UFileServiceException(Long returnCode, String errorMessage)
+    public UFileServiceException(int httpStatusCode, Long returnCode, String errorMessage)
     {
         super((String) null);
         this.requestId = "0";
         this.returnCode = returnCode;
         this.errorMessage = errorMessage;
+        this.httpStatusCode = httpStatusCode;
     }
 
-    public UFileServiceException(String requestId, String errorMessage, Exception cause)
+    public UFileServiceException(int httpStatusCode, String requestId, String errorMessage, Exception cause)
     {
         super(null, cause);
         this.requestId = requestId;
         this.returnCode = Long.valueOf(-1);
         this.errorMessage = errorMessage;
+        this.httpStatusCode = httpStatusCode;
+    }
+
+    public int getHttpStatusCode()
+    {
+        return httpStatusCode;
     }
 
     public Long getReturnCode()

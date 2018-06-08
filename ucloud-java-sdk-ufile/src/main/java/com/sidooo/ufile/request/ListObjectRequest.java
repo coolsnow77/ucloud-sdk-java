@@ -88,13 +88,13 @@ public final class ListObjectRequest
         JsonObject json = response.getResponse();
 
         if (!json.get("BucketName").getAsString().equals(getBucketName())) {
-            throw new UFileServiceException("Bucket Name mismatch.");
+            throw new UFileServiceException(200, "Bucket Name mismatch.");
         }
         UObjectListing objectListing = new UObjectListing();
         objectListing.setBucketName(getBucketName());
         String bucketId = json.get("BucketId").getAsString();
         if (bucketId == null) {
-            throw new UFileServiceException("Bucket Id missing.");
+            throw new UFileServiceException(200, "Bucket Id missing.");
         }
         String nextMarker = json.get("NextMarker").getAsString();
         if (nextMarker != null && nextMarker.length() > 0) {

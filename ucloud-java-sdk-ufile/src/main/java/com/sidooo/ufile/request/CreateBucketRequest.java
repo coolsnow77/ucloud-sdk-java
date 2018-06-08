@@ -47,12 +47,12 @@ public final class CreateBucketRequest
         UResponse response = executor.execute(this);
         JsonObject result = response.getResponse();
         if (!result.has("BucketName")) {
-            throw new UFileServiceException("Bucket Name missing.");
+            throw new UFileServiceException(200, "Bucket Name missing.");
         }
         String bucketName = result.get("BucketName").getAsString();
 
         if (!result.has("BucketId")) {
-            throw new UFileServiceException("Bucket Id missing.");
+            throw new UFileServiceException(200, "Bucket Id missing.");
         }
         String bucketId = result.get("BucketId").getAsString();
 

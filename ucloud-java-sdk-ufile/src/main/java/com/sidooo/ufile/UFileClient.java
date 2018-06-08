@@ -307,7 +307,7 @@ public class UFileClient
         requireNonNull(file, "targetFile is null");
         requireNonNull(contentType, "contentType is null");
 
-        checkState(Mimetypes.getInstance().existMimeType(contentType), "contentType is illegal");
+        checkState(!Mimetypes.getInstance().existMimeType(contentType), "contentType is illegal");
 
         InputStream objectStream;
         try {
@@ -327,7 +327,7 @@ public class UFileClient
         requireNonNull(key, "key is null.");
         requireNonNull(objectStream, "objectStream is null.");
 
-        checkState(Mimetypes.getInstance().existMimeType(contentType), "contentType is illegal");
+        checkState(!Mimetypes.getInstance().existMimeType(contentType), "contentType is illegal");
 
         int length = 0;
         try {
@@ -338,7 +338,7 @@ public class UFileClient
         }
 
         PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key,
-                objectStream, Long.valueOf((long) length));
+                objectStream, Long.valueOf((long) length), contentType);
         return (UObjectMetadata) request.execute(objectExecutor);
     }
 
@@ -354,7 +354,7 @@ public class UFileClient
             return true;
         }
         catch (UFileServiceException e) {
-            if (e.getReturnCode() == 404) {
+            if (e.getHttpStatusCode() == 404) {
                 return false;
             }
             throw e;

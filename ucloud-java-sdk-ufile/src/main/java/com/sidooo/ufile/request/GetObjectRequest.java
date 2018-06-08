@@ -64,7 +64,7 @@ public final class GetObjectRequest
     {
         super(HttpType.GET, region, bucketName);
 
-        requireNonNull(objectRange, "Object range is null");
+        requireNonNull(objectKey, "Object key is null");
         this.setObjectKey(objectKey);
         if (objectRange != null) {
             this.addHeader("Range", objectRange);
