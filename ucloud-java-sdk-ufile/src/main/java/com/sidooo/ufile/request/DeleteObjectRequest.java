@@ -18,6 +18,8 @@ package com.sidooo.ufile.request;
 import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 
+import static java.util.Objects.requireNonNull;
+
 public final class DeleteObjectRequest
         extends UObjectRequest
 {
@@ -31,6 +33,7 @@ public final class DeleteObjectRequest
     public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Object executor is null");
         UResponse response = executor.execute(this, getObjectKey());
         return this.getObjectKey();
     }

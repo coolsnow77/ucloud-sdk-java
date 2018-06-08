@@ -22,6 +22,8 @@ import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 import com.sidooo.ufile.model.UBucketListing;
 
+import static java.util.Objects.requireNonNull;
+
 public final class ListBucketRequest
         extends UBucketRequest
 {
@@ -45,10 +47,12 @@ public final class ListBucketRequest
     public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Bucket executor is null.");
+
         UResponse response = executor.execute(this);
         JsonObject json = response.getResponse();
         if (!json.has("DataSet")) {
-            throw new UFileServiceException("DataSet missing.");
+            throw new UFileServiceException(200, "DataSet missing.");
         }
         JsonArray dataSet = json.getAsJsonArray("DataSet");
         UBucketListing buckets = new UBucketListing();

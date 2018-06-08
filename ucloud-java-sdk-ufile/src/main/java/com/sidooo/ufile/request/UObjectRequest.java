@@ -20,6 +20,8 @@ import com.sidooo.ufile.exception.UFileServiceException;
 
 import java.io.InputStream;
 
+import static java.util.Objects.requireNonNull;
+
 public abstract class UObjectRequest
         extends URequest
 {
@@ -57,7 +59,7 @@ public abstract class UObjectRequest
     public UObjectRequest(HttpType httpType, UFileRegion region, String bucketName)
     {
         super(httpType, region);
-        this.bucketName = bucketName;
+        this.bucketName = requireNonNull(bucketName, "bucket name is null");
     }
 
     public String getBucketName()

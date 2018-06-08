@@ -132,6 +132,19 @@ public interface UFile
             throws UFileClientException, UFileServiceException;
 
     /**
+     * 从对象的指定位置开始读取对象内容
+     *
+     * @param bucketName
+     * @param key
+     * @param offset
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObject getObject(String bucketName, String key, long offset)
+            throws UFileClientException, UFileServiceException;
+
+    /**
      * 获取对象指定偏移和长度的内容
      *
      * @param bucketName
@@ -187,6 +200,20 @@ public interface UFile
             throws UFileClientException, UFileServiceException;
 
     /**
+     * 将文件以指定的Content-Type上传到UFile中
+     *
+     * @param bucketName
+     * @param key
+     * @param file
+     * @param contentType
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObjectMetadata putObject(String bucketName, String key, File file, String contentType)
+            throws UFileClientException, UFileServiceException;
+
+    /**
      * 将数据流上传到UFile中
      *
      * @param bucketName
@@ -196,7 +223,19 @@ public interface UFile
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObjectMetadata putObject(String bucketName, String key, InputStream input)
+    UObjectMetadata putObject(String bucketName, String key, InputStream input, String contentType)
+            throws UFileClientException, UFileServiceException;
+
+    /**
+     * 检查对象是否存在
+     *
+     * @param bucketName
+     * @param objectKey
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    boolean doesObjectExist(String bucketName, String objectKey)
             throws UFileClientException, UFileServiceException;
 
     /**

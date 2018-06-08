@@ -20,6 +20,8 @@ import org.apache.http.Header;
 
 import java.io.InputStream;
 
+import static java.util.Objects.requireNonNull;
+
 public class UResponse
 {
     /**
@@ -39,7 +41,7 @@ public class UResponse
 
     public UResponse(JsonObject response)
     {
-        this.response = response;
+        this.response = requireNonNull(response, "response is null");
     }
 
     public UResponse(Header[] headers)
@@ -49,14 +51,14 @@ public class UResponse
 
     public UResponse(JsonObject response, Header[] headers)
     {
-        this.response = response;
-        this.headers = headers;
+        this.response = requireNonNull(response, "response is null");
+        this.headers = requireNonNull(headers, "headers is null");
     }
 
     public UResponse(Header[] headers, InputStream content)
     {
-        this.headers = headers;
-        this.content = content;
+        this.headers = requireNonNull(headers, "headers is null");
+        this.content = requireNonNull(content, "content is null");
     }
 
     public Header[] getHeaders()

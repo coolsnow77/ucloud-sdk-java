@@ -25,6 +25,8 @@ import com.sidooo.ufile.model.UObjectSummary;
 
 import java.util.Date;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Request Parameters
  *   None
@@ -80,17 +82,19 @@ public final class ListObjectRequest
     public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Object executor is null");
+
         UResponse response = executor.execute(this, "");
         JsonObject json = response.getResponse();
 
         if (!json.get("BucketName").getAsString().equals(getBucketName())) {
-            throw new UFileServiceException("Bucket Name mismatch.");
+            throw new UFileServiceException(200, "Bucket Name mismatch.");
         }
         UObjectListing objectListing = new UObjectListing();
         objectListing.setBucketName(getBucketName());
         String bucketId = json.get("BucketId").getAsString();
         if (bucketId == null) {
-            throw new UFileServiceException("Bucket Id missing.");
+            throw new UFileServiceException(200, "Bucket Id missing.");
         }
         String nextMarker = json.get("NextMarker").getAsString();
         if (nextMarker != null && nextMarker.length() > 0) {

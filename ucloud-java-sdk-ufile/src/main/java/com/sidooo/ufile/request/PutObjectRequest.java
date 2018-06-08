@@ -22,6 +22,8 @@ import org.apache.http.Header;
 
 import java.io.InputStream;
 
+import static java.util.Objects.requireNonNull;
+
 /*
  * Request Parameters
  *   Authorization: 授权签名
@@ -79,6 +81,7 @@ public final class PutObjectRequest
     public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Object executor is null");
         UResponse response = executor.execute(this, getObjectKey());
         Header[] headers = response.getHeaders();
         return new UObjectMetadata(headers);

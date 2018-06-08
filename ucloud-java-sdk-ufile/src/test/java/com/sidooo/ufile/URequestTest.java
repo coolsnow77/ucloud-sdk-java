@@ -28,7 +28,7 @@
  */
 package com.sidooo.ufile;
 
-import com.sidooo.ucloud.Credentials;
+import com.sidooo.ucloud.UCloudCredentials;
 import com.sidooo.ucloud.UCloudSignatureBuilder;
 import org.junit.After;
 import org.junit.Before;
@@ -53,7 +53,7 @@ public class URequestTest
     {
         String publicKey = "ucloudsomeone@example.com1296235120854146120";
         String privateKey = "46f09bb9fab4f12dfc160dae12273d5332b5debe";
-        Credentials credentials = new Credentials(publicKey, privateKey);
+        UCloudCredentials credentials = new UCloudCredentials(publicKey, privateKey);
 
         CreateUHostInstanceRequest request = new CreateUHostInstanceRequest();
 

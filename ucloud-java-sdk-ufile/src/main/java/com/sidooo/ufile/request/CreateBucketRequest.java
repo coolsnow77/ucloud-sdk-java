@@ -21,6 +21,8 @@ import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 
+import static java.util.Objects.requireNonNull;
+
 public final class CreateBucketRequest
         extends UBucketRequest
 {
@@ -41,15 +43,16 @@ public final class CreateBucketRequest
     public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Bucket executor is null");
         UResponse response = executor.execute(this);
         JsonObject result = response.getResponse();
         if (!result.has("BucketName")) {
-            throw new UFileServiceException("Bucket Name missing.");
+            throw new UFileServiceException(200, "Bucket Name missing.");
         }
         String bucketName = result.get("BucketName").getAsString();
 
         if (!result.has("BucketId")) {
-            throw new UFileServiceException("Bucket Id missing.");
+            throw new UFileServiceException(200, "Bucket Id missing.");
         }
         String bucketId = result.get("BucketId").getAsString();
 

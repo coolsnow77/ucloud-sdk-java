@@ -23,6 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static java.util.Objects.requireNonNull;
+
 public class AbstractExcector
 {
     private final UCloudCredentials credentials;
@@ -31,7 +33,7 @@ public class AbstractExcector
 
     public AbstractExcector(UCloudCredentials credentials)
     {
-        this.credentials = credentials;
+        this.credentials = requireNonNull(credentials, "UCloud credentials is null");
         this.httpClient = new DefaultHttpClient();
     }
 

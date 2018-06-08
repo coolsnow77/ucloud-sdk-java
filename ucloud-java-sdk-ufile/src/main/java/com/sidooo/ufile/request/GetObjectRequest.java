@@ -26,6 +26,8 @@ import org.apache.http.Header;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.util.Objects.requireNonNull;
 /*
  *
  * Request Parameters
@@ -55,19 +57,24 @@ public final class GetObjectRequest
 
     public GetObjectRequest(UFileRegion region, String bucketName, String objectKey)
     {
-        super(HttpType.GET, region, bucketName);
-        this.setObjectKey(objectKey);
+        this(region, bucketName, objectKey, null);
     }
 
     public GetObjectRequest(UFileRegion region, String bucketName, String objectKey, String objectRange)
     {
         super(HttpType.GET, region, bucketName);
+
+        requireNonNull(objectKey, "Object key is null");
         this.setObjectKey(objectKey);
-        this.addHeader("Range", objectRange);
+        if (objectRange != null) {
+            this.addHeader("Range", objectRange);
+        }
     }
 
     private String getContentRange(Header[] headers)
     {
+        requireNonNull(headers, "headers is null");
+
         for (Header header : headers) {
             if (header.getName().equals(UFileHeaders.CONTENT_RANGE)) {
                 return header.getValue();
@@ -80,6 +87,8 @@ public final class GetObjectRequest
     public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "executor is null.");
+
         UResponse response = executor.execute(this, this.getObjectKey());
         Header[] headers = response.getHeaders();
         InputStream content = response.getContent();

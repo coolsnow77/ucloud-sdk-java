@@ -45,6 +45,8 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public final class ObjectExecutor
         extends AbstractExcector
 {
@@ -88,6 +90,9 @@ public final class ObjectExecutor
     public UResponse execute(UObjectRequest request, String objectKey)
             throws UFileClientException
     {
+        requireNonNull(request, "Object request is null");
+        requireNonNull(objectKey, "Object key is null");
+
         // 生成Http请求
         HttpUriRequest httpRequest = null;
         try {
@@ -173,9 +178,9 @@ public final class ObjectExecutor
                         if (returnCode != 0) {
                             if (json.has("ErrMsg")) {
                                 String errorMessage = json.get("ErrMsg").getAsString();
-                                throw new UFileServiceException(returnCode, errorMessage);
+                                throw new UFileServiceException(200, returnCode, errorMessage);
                             }
-                            throw new UFileServiceException("Return Code: " + returnCode);
+                            throw new UFileServiceException(200, "Return Code: " + returnCode);
                         }
                         else {
                             json.remove("RetCode");
@@ -212,24 +217,27 @@ public final class ObjectExecutor
                     JsonParser parser = new JsonParser();
                     JsonObject json = parser.parse(content).getAsJsonObject();
                     if (!json.has("RetCode")) {
-                        throw new UFileServiceException("RetCode missing.");
+                        throw new UFileServiceException(httpResponse.getStatusLine().getStatusCode(), "RetCode missing.");
                     }
                     Long returnCode = json.get("RetCode").getAsLong();
                     if (returnCode != 0) {
                         if (json.has("ErrMsg")) {
                             String errorMessage = json.get("ErrMsg").getAsString();
-                            throw new UFileServiceException(returnCode, errorMessage);
+                            throw new UFileServiceException(httpResponse.getStatusLine().getStatusCode(), returnCode, errorMessage);
                         }
-                        throw new UFileServiceException("Return Code: " + returnCode);
+                        throw new UFileServiceException(httpResponse.getStatusLine().getStatusCode(), returnCode);
                     }
                     else {
-                        throw new UFileServiceException(returnCode);
+                        throw new UFileServiceException(httpResponse.getStatusLine().getStatusCode(), returnCode);
                     }
                 }
                 else {
-                    throw new UFileServiceException("Http Status Code:" + httpResponse.getStatusLine().getStatusCode());
+                    throw new UFileServiceException(httpResponse.getStatusLine().getStatusCode());
                 }
             }
+        }
+        catch (UFileServiceException se) {
+            throw se;
         }
         catch (Exception e) {
             throw new UFileClientException(e);

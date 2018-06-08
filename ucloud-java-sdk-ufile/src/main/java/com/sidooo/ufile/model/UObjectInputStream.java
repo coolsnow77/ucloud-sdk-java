@@ -52,4 +52,10 @@ public class UObjectInputStream
         int estimate = super.available();
         return estimate == 0 ? 1 : estimate;
     }
+
+    @Override
+    public void close() throws IOException
+    {
+        super.close();
+    }
 }
