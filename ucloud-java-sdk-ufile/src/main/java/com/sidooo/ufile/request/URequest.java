@@ -20,6 +20,8 @@ import com.sidooo.ufile.UFileRegion;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public class URequest
 {
     private final UFileRegion region;
@@ -29,7 +31,7 @@ public class URequest
     /**
      * 请求的URL Parameters
      */
-    private Map<String, String> parameters = new HashMap<String, String>();
+    private final Map<String, String> parameters = new HashMap<String, String>();
 
     /**
      * 请求的URL Headers
@@ -38,8 +40,8 @@ public class URequest
 
     public URequest(HttpType httpType, UFileRegion region)
     {
-        this.httpType = httpType;
-        this.region = region;
+        this.httpType = requireNonNull(httpType, "Http type is null");
+        this.region = requireNonNull(region, "region is null");
     }
 
     public UFileRegion getRegion()
@@ -54,11 +56,14 @@ public class URequest
 
     public void addParameter(String name, String value)
     {
+        requireNonNull(name, "Parameter name is null");
+        requireNonNull(value, "Parameter value is null");
         this.parameters.put(name, value);
     }
 
     public String getParameter(String name)
     {
+        requireNonNull(name, "Parameter name is null");
         return this.parameters.get(name);
     }
 
@@ -69,6 +74,8 @@ public class URequest
 
     public void addHeader(String name, String value)
     {
+        requireNonNull(name, "Parameter name is null");
+        requireNonNull(value, "Parameter value is null");
         this.headers.put(name, value);
     }
 
@@ -79,6 +86,7 @@ public class URequest
 
     public String getHeader(String name)
     {
+        requireNonNull(name, "Parameter name is null");
         return headers.get(name);
     }
 

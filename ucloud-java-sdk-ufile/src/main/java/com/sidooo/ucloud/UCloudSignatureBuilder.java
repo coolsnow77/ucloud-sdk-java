@@ -22,6 +22,8 @@ import java.security.MessageDigest;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static java.util.Objects.requireNonNull;
+
 public class UCloudSignatureBuilder
 {
     private UCloudSignatureBuilder()
@@ -30,6 +32,9 @@ public class UCloudSignatureBuilder
 
     public static String getHttpString(UBucketRequest request, UCloudCredentials credentials)
     {
+        requireNonNull(request, "Bucket request is null");
+        requireNonNull(credentials, "UCloud credentials is null");
+
         Map<String, String> sortedMap = new TreeMap<String, String>();
         sortedMap.put("PublicKey", credentials.getPublicKey());
         for (Map.Entry<String, String> entry : request.getParameters().entrySet()) {
@@ -48,6 +53,9 @@ public class UCloudSignatureBuilder
 
     public static String getAPIString(UBucketRequest request, UCloudCredentials credentials)
     {
+        requireNonNull(request, "Bucket request is null");
+        requireNonNull(credentials, "UCloud credentials is null");
+
         // 将字符串进行排序
         Map<String, String> sortedMap = new TreeMap<String, String>();
         sortedMap.put("PublicKey", credentials.getPublicKey());
@@ -65,6 +73,9 @@ public class UCloudSignatureBuilder
 
     public static String getSignature(UBucketRequest request, UCloudCredentials credentials)
     {
+        requireNonNull(request, "Bucket request is null");
+        requireNonNull(credentials, "UCloud credentials is null");
+
         String signatureString = getAPIString(request, credentials);
 
         String hashKey = null;

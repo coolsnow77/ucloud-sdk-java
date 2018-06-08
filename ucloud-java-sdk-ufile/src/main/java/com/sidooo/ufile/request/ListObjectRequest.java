@@ -25,6 +25,8 @@ import com.sidooo.ufile.model.UObjectSummary;
 
 import java.util.Date;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Request Parameters
  *   None
@@ -80,6 +82,8 @@ public final class ListObjectRequest
     public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Object executor is null");
+
         UResponse response = executor.execute(this, "");
         JsonObject json = response.getResponse();
 

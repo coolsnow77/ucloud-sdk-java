@@ -132,6 +132,19 @@ public interface UFile
             throws UFileClientException, UFileServiceException;
 
     /**
+     * 从对象的指定位置开始读取对象内容
+     *
+     * @param bucketName
+     * @param key
+     * @param offset
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObject getObject(String bucketName, String key, long offset)
+            throws UFileClientException, UFileServiceException;
+
+    /**
      * 获取对象指定偏移和长度的内容
      *
      * @param bucketName
@@ -197,6 +210,18 @@ public interface UFile
      * @throws UFileServiceException
      */
     UObjectMetadata putObject(String bucketName, String key, InputStream input)
+            throws UFileClientException, UFileServiceException;
+
+    /**
+     * 检查对象是否存在
+     *
+     * @param bucketName
+     * @param objectKey
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    boolean doesObjectExist(String bucketName, String objectKey)
             throws UFileClientException, UFileServiceException;
 
     /**

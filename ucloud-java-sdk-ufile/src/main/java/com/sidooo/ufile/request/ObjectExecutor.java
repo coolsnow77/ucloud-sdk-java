@@ -45,6 +45,8 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public final class ObjectExecutor
         extends AbstractExcector
 {
@@ -88,6 +90,9 @@ public final class ObjectExecutor
     public UResponse execute(UObjectRequest request, String objectKey)
             throws UFileClientException
     {
+        requireNonNull(request, "Object request is null");
+        requireNonNull(objectKey, "Object key is null");
+
         // 生成Http请求
         HttpUriRequest httpRequest = null;
         try {

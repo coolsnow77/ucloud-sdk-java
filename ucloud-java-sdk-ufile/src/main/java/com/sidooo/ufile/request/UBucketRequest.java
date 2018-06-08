@@ -18,12 +18,16 @@ package com.sidooo.ufile.request;
 import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 
+import static java.util.Objects.requireNonNull;
+
 public abstract class UBucketRequest
         extends URequest
 {
     public UBucketRequest(HttpType httpType, String actionName, UFileRegion region)
     {
         super(httpType, region);
+
+        requireNonNull(actionName, "action name is null.");
         this.addParameter("Action", actionName);
     }
 

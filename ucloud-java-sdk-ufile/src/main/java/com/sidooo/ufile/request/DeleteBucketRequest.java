@@ -19,6 +19,8 @@ import com.google.gson.JsonObject;
 import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 
+import static java.util.Objects.requireNonNull;
+
 public final class DeleteBucketRequest
         extends UBucketRequest
 {
@@ -32,6 +34,7 @@ public final class DeleteBucketRequest
     public Object execute(BucketExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Bucket executor is null");
         UResponse response = executor.execute(this);
         JsonObject json = response.getResponse();
         if (!json.has("BucketId")) {

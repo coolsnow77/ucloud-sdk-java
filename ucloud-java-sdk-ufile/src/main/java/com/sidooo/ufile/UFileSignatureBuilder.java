@@ -21,6 +21,8 @@ import com.sidooo.ufile.request.UObjectRequest;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * UFile API操作有两种签名
  * 1. Bucket操作走的是UCloud统一的API， 使用UCloud API签名算法
@@ -57,13 +59,17 @@ public class UFileSignatureBuilder
         }
     }
 
-    public static String getSignature(UObjectRequest request, String objectkey, UCloudCredentials credentials)
+    public static String getSignature(UObjectRequest request, String objectKey, UCloudCredentials credentials)
     {
+        requireNonNull(request, "Object request is null");
+        requireNonNull(objectKey, "Object key is null");
+        requireNonNull(credentials, "UCloud credentials is null");
+
         String contentMD5 = request.getContentMD5();
         String contentType = request.getContentType();
         String date = request.getDate();
         String canonicalizedUcloudHeaders = spliceCanonicalHeaders(request);
-        String canonicalizedResource = "/" + request.getBucketName() + "/" + objectkey;
+        String canonicalizedResource = "/" + request.getBucketName() + "/" + objectKey;
         String stringToSign = request.getHttpType() + "\n"
                 + contentMD5 + "\n"
                 + contentType + "\n"

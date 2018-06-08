@@ -34,6 +34,8 @@ import org.apache.http.client.utils.URIBuilder;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public final class BucketExecutor
         extends AbstractExcector
 {
@@ -47,6 +49,7 @@ public final class BucketExecutor
     public UResponse execute(UBucketRequest request)
             throws UFileClientException
     {
+        requireNonNull(request, "bucket request is null.");
         // 计算API请求的签名
         String signature = UCloudSignatureBuilder.getSignature(request, getCredentials());
 

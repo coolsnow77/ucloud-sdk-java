@@ -20,6 +20,8 @@ import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UObjectMetadata;
 import org.apache.http.Header;
 
+import static java.util.Objects.requireNonNull;
+
 public final class GetObjectMetaRequest
         extends UObjectRequest
 {
@@ -33,6 +35,8 @@ public final class GetObjectMetaRequest
     public Object execute(ObjectExecutor executor)
             throws UFileServiceException
     {
+        requireNonNull(executor, "Object executor is null");
+
         UResponse response = executor.execute(this, getObjectKey());
         Header[] headers = response.getHeaders();
         return new UObjectMetadata(headers);

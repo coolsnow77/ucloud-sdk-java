@@ -21,12 +21,15 @@ import com.sidooo.ufile.UFileRegion;
 import com.sidooo.ufile.exception.UFileServiceException;
 import com.sidooo.ufile.model.UBucket;
 
+import static java.util.Objects.requireNonNull;
+
 public final class GetBucketRequest
         extends UBucketRequest
 {
     public GetBucketRequest(UFileRegion region, String bucketName)
     {
         super(HttpType.GET, "DescribeBucket", region);
+        requireNonNull(bucketName, "Bucket name is null");
         this.addParameter("BucketName", bucketName);
     }
 

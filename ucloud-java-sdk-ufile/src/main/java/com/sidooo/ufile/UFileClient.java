@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 public class UFileClient
@@ -75,9 +76,9 @@ public class UFileClient
             BucketExecutor bucketExecutor,
             ObjectExecutor objectExecutor)
     {
-        this.credentials = credentials;
-        this.bucketExecutor = bucketExecutor;
-        this.objectExecutor = objectExecutor;
+        this.credentials = requireNonNull(credentials, "UCloud credentials is null");
+        this.bucketExecutor = requireNonNull(bucketExecutor, "Bucket executor is null");
+        this.objectExecutor = requireNonNull(objectExecutor, "Object executor is null");
     }
 
     @Override
@@ -182,11 +183,20 @@ public class UFileClient
     }
 
     @Override
+    public UObject getObject(String bucketName, String key, long offset)
+            throws UFileClientException, UFileServiceException
+    {
+        return getObject(bucketName, key, offset,  Integer.MAX_VALUE - 1);
+    }
+
+    @Override
     public UObject getObject(String bucketName, String key, long offset, int length)
             throws UFileClientException, UFileServiceException
     {
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "objectKey is null");
+        checkArgument(offset >= 0, "offset is negative: %d", offset);
+        checkArgument(length > 0, "length must be greater than 0");
 
         String range = String.format("bytes=%d-%d", offset, offset + length - 1);
         GetObjectRequest request = new GetObjectRequest(defaultRegion, bucketName, key, range);
@@ -199,6 +209,7 @@ public class UFileClient
     {
         requireNonNull(bucketName, "bucketName is null");
         requireNonNull(key, "objectKey is null");
+        requireNonNull(destinationFile, "Destination file is null");
 
         UObject object = getObject(bucketName, key);
 
@@ -311,6 +322,24 @@ public class UFileClient
 
         PutObjectRequest request = new PutObjectRequest(defaultRegion, bucketName, key, objectStream, Long.valueOf((long)length));
         return (UObjectMetadata) request.execute(objectExecutor);
+    }
+
+    @Override
+    public boolean doesObjectExist(String bucketName, String objectKey)
+            throws UFileClientException, UFileServiceException
+    {
+        requireNonNull(bucketName, "bucketName is null.");
+        requireNonNull(objectKey, "objectKey is null.");
+
+        try {
+            getObjectMetadata(bucketName, objectKey);
+            return true;
+        } catch (UFileServiceException e) {
+            if (e.getReturnCode() == 404) {
+                return false;
+            }
+            throw e;
+        }
     }
 
     @Override

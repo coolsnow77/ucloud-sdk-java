@@ -69,6 +69,11 @@ public class UFileServiceException
         this.errorMessage = errorMessage;
     }
 
+    public Long getReturnCode()
+    {
+        return this.returnCode;
+    }
+
     public String getRequestId()
     {
         return requestId;
