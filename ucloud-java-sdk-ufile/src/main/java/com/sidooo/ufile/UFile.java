@@ -123,107 +123,117 @@ public interface UFile
      * 获取UFile对象
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @return ufile object
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObject getObject(String bucketName, String key)
+    UObject getObject(String bucketName, String objectKey)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 从对象的指定位置开始读取对象内容
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @param offset
      * @return
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObject getObject(String bucketName, String key, long offset)
+    UObject getObject(String bucketName, String objectKey, long offset)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 获取对象指定偏移和长度的内容
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @param offset
      * @param length
      * @return ufile object
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObject getObject(String bucketName, String key, long offset, int length)
+    UObject getObject(String bucketName, String objectKey, long offset, int length)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 下载UFile对象到指定的文件中
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @param destinationFile
      * @return ufile object meatadata
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObjectMetadata getObject(String bucketName, String key, File destinationFile)
+    UObjectMetadata getObject(String bucketName, String objectKey, File destinationFile)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 将指定的UFile内容以String的方式返回
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @return object content
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    String getObjectAsString(String bucketName, String key)
+    String getObjectAsString(String bucketName, String objectKey)
             throws UFileClientException, UFileServiceException;
 
-    UObjectMetadata getObjectMetadata(String bucketName, String key)
+    /**
+     * 获取UFile对象的元数据
+     *
+     * @param bucketName
+     * @param objectKey
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObjectMetadata getObjectMetadata(String bucketName, String objectKey)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 上传文件到UFile中
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @param file
      * @return metadata of ufile object
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObjectMetadata putObject(String bucketName, String key, File file)
+    UObjectMetadata putObject(String bucketName, String objectKey, File file)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 将文件以指定的Content-Type上传到UFile中
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @param file
      * @param contentType
      * @return
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObjectMetadata putObject(String bucketName, String key, File file, String contentType)
+    UObjectMetadata putObject(String bucketName, String objectKey, File file, String contentType)
             throws UFileClientException, UFileServiceException;
 
     /**
      * 将数据流上传到UFile中
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @param input
+     * @param contentType
      * @return
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    UObjectMetadata putObject(String bucketName, String key, InputStream input, String contentType)
+    UObjectMetadata putObject(String bucketName, String objectKey, InputStream input, String contentType)
             throws UFileClientException, UFileServiceException;
 
     /**
@@ -266,12 +276,12 @@ public interface UFile
      * 删除UFile对象
      *
      * @param bucketName
-     * @param key
+     * @param objectKey
      * @return deleted object key
      * @throws UFileClientException
      * @throws UFileServiceException
      */
-    String deleteObject(String bucketName, String key)
+    String deleteObject(String bucketName, String objectKey)
             throws UFileClientException, UFileServiceException;
 
     /**

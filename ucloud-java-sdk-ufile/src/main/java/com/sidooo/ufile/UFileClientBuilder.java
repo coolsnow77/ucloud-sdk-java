@@ -98,6 +98,13 @@ public final class UFileClientBuilder
         return standard(credentials, region);
     }
 
+    /**
+     * 根据UCloud密钥和Region创建UFile客户端
+     *
+     * @param credentials
+     * @param defaultRegion
+     * @return
+     */
     public static UFile standard(UCloudCredentials credentials, UFileRegion defaultRegion)
     {
         requireNonNull(credentials, "credentials is null.");
