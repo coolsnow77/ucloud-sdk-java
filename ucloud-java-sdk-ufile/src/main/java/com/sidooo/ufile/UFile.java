@@ -200,6 +200,20 @@ public interface UFile
             throws UFileClientException, UFileServiceException;
 
     /**
+     * 将文件以指定的Content-Type上传到UFile中
+     *
+     * @param bucketName
+     * @param key
+     * @param file
+     * @param contentType
+     * @return
+     * @throws UFileClientException
+     * @throws UFileServiceException
+     */
+    UObjectMetadata putObject(String bucketName, String key, File file, String contentType)
+            throws UFileClientException, UFileServiceException;
+
+    /**
      * 将数据流上传到UFile中
      *
      * @param bucketName

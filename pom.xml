@@ -77,7 +77,6 @@
     <modules>
         <module>ucloud-java-sdk-ufile</module>
         <module>ucloud-java-sdk-usql</module>
-        <module>ucloud-java-sdk-emrfs</module>
     </modules>
 
     <dependencyManagement>
