@@ -118,9 +118,10 @@ public class Mimetypes
                         String extension = st.nextToken();
                         extensionToMimetypeMap.put(extension.toLowerCase(), mimetype);
                     }
+                    mimeTypeSet.add(mimetype);
                 } else if (st.countTokens() == 1) {
-                    String mimeType = st.nextToken();
-                    mimeTypeSet.add(mimeType);
+                    String mimetype = st.nextToken();
+                    mimeTypeSet.add(mimetype);
                 } else {
                     continue;
                 }
